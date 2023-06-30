@@ -19,5 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/allProv', [ProvKotaController::class, 'allProv']);
-Route::get('/getKota', [ProvKotaController::class, 'kotaByProv']);
+Route::group(['prefix' => 'daerah'], function(){
+    Route::get('/provinsi', [ProvKotaController::class, 'allProv']);
+    Route::get('/kota', [ProvKotaController::class, 'kotaByProv']);
+});

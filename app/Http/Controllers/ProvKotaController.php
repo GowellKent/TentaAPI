@@ -6,6 +6,7 @@ use App\Models\tvl_kota;
 use App\Models\tvl_provinsi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ProvKotaController extends Controller
 {
@@ -15,10 +16,19 @@ class ProvKotaController extends Controller
     }
 
     public function kotaByProv(Request $request){
-        $provinsi = $request->input('tk_tp_kode');
-        
-        $kota = tvl_provinsi::find($provinsi)->tvl_kota;
 
-        return $kota;
+        $validate = Validator::make($request->all(), [
+            'id_provinsi' => 'required'
+        ]);
+        
+        //response error validation
+        if ($validate->fails()) {
+            return response()->json($validate->errors(), 400);
+        }
+        
+        $provinsi = $request->input('id_provinsi');
+        
+        return tvl_provinsi::find($provinsi)->tvl_kota;
+
     }
 }
