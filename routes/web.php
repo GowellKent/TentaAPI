@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FotoTransportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/upFoto', [FotoTransportController::class, 'createForm']);
+Route::post('/upFoto', [FotoTransportController::class, 'fileUpload'])->name('fileUpload');

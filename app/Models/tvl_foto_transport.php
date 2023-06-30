@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class tvl_kota extends Model
+class tvl_foto_transport extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'tk_kode';
+    protected $primaryKey = 'tft_kode';
     protected $fillable = [
-        'tk_kode', 'tk_tp_kode', 'tk_nama'
+        'tft_kode', 'tft_tt_kode', 'tft_path'
     ];
 
-    public function tvl_provinsi(): BelongsTo
+    public function transport(): BelongsTo
     {
-        return $this->belongsTo(tvl_provinsi::class, 'tk_tp_kode', 'tp_kode');
+        return $this->belongsTo(tvl_transport::class, 'tt_kode', 'tft_tt_kode');
     }
 }

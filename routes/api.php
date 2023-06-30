@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FotoTransportController;
 use App\Http\Controllers\ProvKotaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,3 +24,6 @@ Route::group(['prefix' => 'daerah'], function(){
     Route::get('/provinsi', [ProvKotaController::class, 'allProv']);
     Route::get('/kota', [ProvKotaController::class, 'kotaByProv']);
 });
+
+Route::post('/delFoto', [FotoTransportController::class, 'delFoto']);
+Route::get('/findFoto', [FotoTransportController::class, 'findFoto']);
