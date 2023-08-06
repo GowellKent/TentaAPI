@@ -23,7 +23,7 @@ class FotoTransportController extends Controller
         // ]);
 
         $validate = Validator::make($req->all(), [
-            'file' => 'required|mimes:png,jpg,jpeg|max:2048',
+            'file' => 'required|mimes:png,jpg,jpeg,svg|max:2048',
             'tft_tt_kode' => 'required'
         ]);
         
