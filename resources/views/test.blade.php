@@ -51,5 +51,9 @@
             <img src={{"/fotoTransport/".Session::get('file')}}>
           @endif
     </div>
+    <form action="/logout" method="POST">
+        @csrf
+        <button class="btn btn-success mt-3" type="submit" style="color:#FFFFFF">Sign out</button>
+    </form>
 </body>
 </html>

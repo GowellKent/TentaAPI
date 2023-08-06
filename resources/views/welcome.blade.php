@@ -128,5 +128,9 @@
                 </div>
             </div>
         </div>
-    </body>
+        <form action="/logout" method="POST">
+            @csrf
+            <button class="btn btn-link mt-3" type="submit" style="color:#FFFFFF">Sign out</button>
+        </form>
+        </body>
 </html>

@@ -106,7 +106,7 @@ class LoginController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect()->intended('/reservasi');
+            return redirect()->intended('/');
         }
 
         return back()->withInput()->with('loginError', 'Login Failed!');
