@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FotoTransportController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProvKotaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,3 +28,5 @@ Route::group(['prefix' => 'daerah'], function(){
 
 Route::post('/delFoto', [FotoTransportController::class, 'delFoto']);
 Route::get('/findFoto', [FotoTransportController::class, 'findFoto']);
+
+Route::post('/register', [LoginController::class, 'register']);

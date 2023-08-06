@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class UserController extends Controller
+class LoginController extends Controller
 {
     //
     //fungsi register akun
@@ -34,6 +34,7 @@ class UserController extends Controller
         ]);
 
         $validatedData['password'] = bcrypt($validatedData['password']);
+        $validatedData['role'] = 1;
 
         $result = User::create($validatedData);
 
