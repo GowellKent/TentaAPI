@@ -34,14 +34,16 @@ class LoginController extends Controller
         ]);
 
         $validatedData['password'] = bcrypt($validatedData['password']);
-        $validatedData['role'] = 1;
+        $validatedData['role'] = 0; //non-Admin role
 
         $result = User::create($validatedData);
+        $success['token'] = $result->createToken('MyApp')->plainTextToken;
 
         if ($result) {
             return response()->json([
                 'success' => true,
-                'message' => 'Account created'
+                'message' => 'Account created',
+                'data' => $success
             ], 201);
         } else {
             return response()->json([
@@ -73,9 +75,12 @@ class LoginController extends Controller
 
             // $request->session()->regenerate();
 
-            $user = DB::table("users")->select("id", "name", "email", "whatsapp")
-                ->where("email", $credentials['email'])
-                ->get();
+            // $user = DB::table("users")->select("id", "name", "email", "whatsapp")
+            //     ->where("email", $credentials['email'])
+            //     ->get();
+            $user = Auth::user();
+            $success = $user;
+            $success['token'] = $request->user()->createToken('MyApp')->plainTextToken;
 
             return response()->json([
                 'success' => true,

@@ -21,12 +21,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix' => 'daerah'], function(){
+Route::group(['prefix' => 'daerah', 'middleware' => 'auth:sanctum'], function(){
     Route::get('/provinsi', [ProvKotaController::class, 'allProv']);
     Route::get('/kota', [ProvKotaController::class, 'kotaByProv']);
 });
 
-Route::post('/delFoto', [FotoTransportController::class, 'delFoto']);
-Route::get('/findFoto', [FotoTransportController::class, 'findFoto']);
+Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'isAdmin']], function(){
+    Route::post('/delFoto', [FotoTransportController::class, 'delFoto']);
+    Route::get('/findFoto', [FotoTransportController::class, 'findFoto']);
+});
 
 Route::post('/register', [LoginController::class, 'register']);
+Route::post('/login', [LoginController::class, 'authenticate']);
