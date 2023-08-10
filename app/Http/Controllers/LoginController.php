@@ -37,13 +37,13 @@ class LoginController extends Controller
         $validatedData['role'] = 0; //non-Admin role
 
         $result = User::create($validatedData);
-        $success['token'] = $result->createToken('MyApp')->plainTextToken;
+        // $success['token'] = $result->createToken('TentaAPI')->plainTextToken;
 
         if ($result) {
             return response()->json([
                 'success' => true,
                 'message' => 'Account created',
-                'data' => $success
+                'data' => $result
             ], 201);
         } else {
             return response()->json([
@@ -53,7 +53,7 @@ class LoginController extends Controller
         }
     }
 
-    //fungsi login
+    //fungsi login API
     public function authenticate(Request $request)
     {
 
@@ -80,7 +80,7 @@ class LoginController extends Controller
             //     ->get();
             $user = Auth::user();
             $success = $user;
-            $success['token'] = $request->user()->createToken('MyApp')->plainTextToken;
+            $success['token'] = $request->user()->createToken('TentaAPI')->plainTextToken;
 
             return response()->json([
                 'success' => true,
@@ -118,7 +118,7 @@ class LoginController extends Controller
     }
 
     public function users(){
-        $resp = DB::table("users")
+        $resp = DB::table("users")->where('role', '0')
         ->get();
         return view('users.index', ['response'=>$resp, 'title'=>'Customers']);
     }
@@ -131,7 +131,10 @@ class LoginController extends Controller
 
         $request->session()->regenerateToken();
 
+        // $request->user()->tokens()->delete();
+
         return redirect('/');
 
     }
+
 }

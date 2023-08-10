@@ -33,3 +33,5 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'isAdmin']],
 
 Route::post('/register', [LoginController::class, 'register']);
 Route::post('/login', [LoginController::class, 'authenticate']);
+Route::post('/logout', [LoginController::class, 'logoutAPI']);
+Route::get('/revokeall', [LoginController::class, 'revokeAll']);
