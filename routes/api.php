@@ -3,6 +3,7 @@
 use App\Http\Controllers\FotoTransportController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProvKotaController;
+use App\Http\Controllers\TransportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,14 @@ Route::group(['prefix' => 'daerah', 'middleware' => 'auth:sanctum'], function(){
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'isAdmin']], function(){
     Route::post('/delFoto', [FotoTransportController::class, 'delFoto']);
     Route::get('/findFoto', [FotoTransportController::class, 'findFoto']);
+});
+
+Route::group(['prefix' => 'transport'], function(){
+    Route::get('/all', [TransportController::class, 'getAll']);
+    Route::get('/find', [TransportController::class, 'find']);
+    Route::post('/store', [TransportController::class, 'store']);
+    Route::post('/update', [TransportController::class, 'update']);
+    Route::post('/delete', [TransportController::class, 'delete']);
 });
 
 Route::post('/register', [LoginController::class, 'register']);
