@@ -38,6 +38,7 @@ Route::group(['prefix' => 'transport'], function(){
     Route::post('/store', [TransportController::class, 'store']);
     Route::post('/update', [TransportController::class, 'update']);
     Route::post('/delete', [TransportController::class, 'delete']);
+    Route::post('/search', [TransportController::class, 'searchByRoute']);
 });
 
 Route::post('/register', [LoginController::class, 'register']);
