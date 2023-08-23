@@ -45,7 +45,7 @@ Route::group(['prefix' => 'transport', 'middleware' => 'auth:sanctum'], function
 Route::group(['prefix' => 'objek', 'middleware' => 'auth:sanctum'], function(){
     Route::get('/all', [ObjekController::class, 'getAll']);
     Route::get('/find', [ObjekController::class, 'find']);
-    Route::get('/findByLoc', [ObjekController::class, 'findByLoc']);
+    Route::get('/findbyloc', [ObjekController::class, 'findByLoc']);
     Route::get('/jenis', [ObjekController::class, 'jenis']);
     // Route::post('/store', [ObjekController::class, 'store']);
     // Route::post('/update', [ObjekController::class, 'update']);
