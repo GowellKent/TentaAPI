@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FotoTransportController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ObjekController;
 use App\Http\Controllers\ProvKotaController;
 use App\Http\Controllers\TransportController;
 use Illuminate\Http\Request;
@@ -32,13 +33,23 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'isAdmin']],
     Route::get('/findFoto', [FotoTransportController::class, 'findFoto']);
 });
 
-Route::group(['prefix' => 'transport'], function(){
+Route::group(['prefix' => 'transport', 'middleware' => 'auth:sanctum'], function(){
     Route::get('/all', [TransportController::class, 'getAll']);
     Route::get('/find', [TransportController::class, 'find']);
-    Route::post('/store', [TransportController::class, 'store']);
-    Route::post('/update', [TransportController::class, 'update']);
-    Route::post('/delete', [TransportController::class, 'delete']);
+    // Route::post('/store', [TransportController::class, 'store']);
+    // Route::post('/update', [TransportController::class, 'update']);
+    // Route::post('/delete', [TransportController::class, 'delete']);
     Route::post('/search', [TransportController::class, 'searchByRoute']);
+});
+
+Route::group(['prefix' => 'objek', 'middleware' => 'auth:sanctum'], function(){
+    Route::get('/all', [ObjekController::class, 'getAll']);
+    Route::get('/find', [ObjekController::class, 'find']);
+    Route::get('/findByLoc', [ObjekController::class, 'findByLoc']);
+    Route::get('/jenis', [ObjekController::class, 'jenis']);
+    // Route::post('/store', [ObjekController::class, 'store']);
+    // Route::post('/update', [ObjekController::class, 'update']);
+    // Route::post('/delete', [ObjekController::class, 'delete']);
 });
 
 Route::post('/register', [LoginController::class, 'register']);

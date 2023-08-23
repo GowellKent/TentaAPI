@@ -82,7 +82,7 @@ class TransportController extends Controller
         //failed save to database
         return response()->json([
             'success' => false,
-            'message' => 'Objek Tujuan Failed to Save',
+            'message' => 'Data Bus Failed to Save',
         ], 409);
     }
 
