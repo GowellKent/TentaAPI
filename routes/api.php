@@ -4,6 +4,7 @@ use App\Http\Controllers\FotoObjekController;
 use App\Http\Controllers\FotoTransportController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ObjekController;
+use App\Http\Controllers\PaketController;
 use App\Http\Controllers\ProvKotaController;
 use App\Http\Controllers\TransportController;
 use Illuminate\Http\Request;
@@ -40,6 +41,17 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'isAdmin']],
     });
 });
 
+Route::group(['prefix' => 'paket', 'middleware' => 'auth:sanctum'], function(){
+    Route::group(['prefix' => 'head'], function(){
+        Route::get('/all', [PaketController::class, 'getAllHead']);
+        Route::get('/find', [PaketController::class, 'findHead']);
+        Route::get('/jenis', [PaketController::class, 'jenis']);
+        Route::get('/search', [PaketController::class, 'searchHead']);
+        // Route::post('/storeHead', [PaketController::class, 'storeHead']);
+        // Route::post('/updateHead', [PaketController::class, 'updateHead']);
+        // Route::post('/deleteHead', [PaketController::class, 'deleteHead']);
+    });
+});
 Route::group(['prefix' => 'transport', 'middleware' => 'auth:sanctum'], function(){
     Route::get('/all', [TransportController::class, 'getAll']);
     Route::get('/find', [TransportController::class, 'find']);

@@ -32,7 +32,7 @@ class ObjekController extends Controller
         $tot_kode = $request->input('tot_kode');
 
         $resp = tvl_objek_tujuan::find($tot_kode);
-        // $resp['foto'] = tvl_objek_tujuan::find($tot_kode)->fotos;
+        $resp['foto'] = tvl_objek_tujuan::find($tot_kode)->fotos;
 
         if(count($resp->all()) > 0){
             return $resp;
