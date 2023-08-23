@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FotoObjekController;
 use App\Http\Controllers\FotoTransportController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ObjekController;
@@ -29,8 +30,14 @@ Route::group(['prefix' => 'daerah', 'middleware' => 'auth:sanctum'], function(){
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'isAdmin']], function(){
-    Route::post('/delFoto', [FotoTransportController::class, 'delFoto']);
-    Route::get('/findFoto', [FotoTransportController::class, 'findFoto']);
+    Route::group(['prefix' => 'fottran'], function(){
+        Route::post('/delete', [FotoTransportController::class, 'delFoto']);
+        Route::get('/find', [FotoTransportController::class, 'findFoto']);
+    });
+    Route::group(['prefix' => 'fotobj'], function(){
+        Route::post('/delete', [FotoObjekController::class, 'delFoto']);
+        Route::get('/find', [FotoObjekController::class, 'findFoto']);
+    });
 });
 
 Route::group(['prefix' => 'transport', 'middleware' => 'auth:sanctum'], function(){
