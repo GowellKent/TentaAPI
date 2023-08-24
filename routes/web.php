@@ -30,5 +30,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
     Route::post('/upfoto', [FotoTransportController::class, 'fileUpload'])->name('fileUpload');
 });
 
+Route::get('/testchart', [LoginController::class, 'chartJs']);
+
 // Route::get('/upFoto', [FotoTransportController::class, 'createForm']);
 // Route::post('/upFoto', [FotoTransportController::class, 'fileUpload'])->name('fileUpload');
