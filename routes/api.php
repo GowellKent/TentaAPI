@@ -51,6 +51,14 @@ Route::group(['prefix' => 'paket', 'middleware' => 'auth:sanctum'], function(){
         Route::post('/update', [PaketController::class, 'updateHead']);
         Route::post('/delete', [PaketController::class, 'deleteHead']);
     });
+    Route::group(['prefix' => 'det'], function(){
+        Route::get('/all', [PaketController::class, 'getAllDet']);
+        Route::get('/find', [PaketController::class, 'findDet']);
+        Route::post('/store', [PaketController::class, 'storeDet']);
+        Route::post('/update', [PaketController::class, 'updateDet']);
+        Route::post('/delete', [PaketController::class, 'deleteDet']);
+
+    });
 });
 Route::group(['prefix' => 'transport', 'middleware' => 'auth:sanctum'], function(){
     Route::get('/all', [TransportController::class, 'getAll']);
