@@ -47,9 +47,9 @@ Route::group(['prefix' => 'paket', 'middleware' => 'auth:sanctum'], function(){
         Route::get('/find', [PaketController::class, 'findHead']);
         Route::get('/jenis', [PaketController::class, 'jenis']);
         Route::get('/search', [PaketController::class, 'searchHead']);
-        // Route::post('/storeHead', [PaketController::class, 'storeHead']);
-        // Route::post('/updateHead', [PaketController::class, 'updateHead']);
-        // Route::post('/deleteHead', [PaketController::class, 'deleteHead']);
+        Route::post('/store', [PaketController::class, 'storeHead']);
+        Route::post('/update', [PaketController::class, 'updateHead']);
+        Route::post('/delete', [PaketController::class, 'deleteHead']);
     });
 });
 Route::group(['prefix' => 'transport', 'middleware' => 'auth:sanctum'], function(){
