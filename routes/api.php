@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ObjekController;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\ProvKotaController;
+use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\TransportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -79,7 +80,19 @@ Route::group(['prefix' => 'objek', 'middleware' => 'auth:sanctum'], function(){
     // Route::post('/delete', [ObjekController::class, 'delete']);
 });
 
+Route::group(['prefix' => 'reservasi', 'middleware' => 'auth:sanctum'], function(){
+    Route::group(['prefix' => 'head'], function(){
+        Route::get('/all', [ReservasiController::class, 'getAllHead']);
+        Route::get('/status', [ReservasiController::class, 'status']);
+        Route::get('/find', [ReservasiController::class, 'findHead']);
+        Route::post('/store', [ReservasiController::class, 'storeHead']);
+        Route::post('/update', [ReservasiController::class, 'updateHead']);
+        Route::post('/delete', [ReservasiController::class, 'deleteHead']);
+        Route::post('/user', [ReservasiController::class, 'searchByUser']);
+    });
+});
+
 Route::post('/register', [LoginController::class, 'register']);
 Route::post('/login', [LoginController::class, 'authenticate']);
 Route::post('/logout', [LoginController::class, 'logoutAPI']);
-Route::get('/revokeall', [LoginController::class, 'revokeAll']);
+// Route::get('/revokeall', [LoginController::class, 'revokeAll']);

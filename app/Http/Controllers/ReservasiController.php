@@ -252,4 +252,74 @@ class ReservasiController extends Controller
             ], 409);
         }
     }
+    
+    public function searchByUser(Request $request){
+        $validate = Validator::make($request->all(), [
+            'trh_tu_kode' => 'required'
+        ]);
+
+        //response error validation
+        if ($validate->fails()) {
+            return response()->json($validate->errors(), 400);
+        }
+
+        $dataHead = DB::table("tvl_reservasi_heads")
+            ->select(
+                "trh_kode",
+                "trh_tgl_reservasi",
+                "trh_tgl_jalan",
+                "trh_harga",
+                "trh_pax",
+                "trh_durasi",
+                "name",
+                "whatsapp",
+                "tph_nama",
+                "tsr_desc",
+                "tt_nama"
+            )
+            ->join("tvl_paket_heads", "trh_tph_kode", "=", "tph_kode")
+            ->join("users", "trh_tu_kode", "=", "id")
+            ->join("tvl_status_reservasis", "trh_tsr_kode", "=", "tsr_kode")
+            ->join("tvl_transportasis", "trh_tt_kode", "=", "tt_kode")
+            ->where("trh_tu_kode", $request->input('trh_tu_kode'))
+            ->get();
+
+        if (count($dataHead->all()) > 0) {
+            if (count($dataHead->all()) == 1) {
+
+                $dataDetail = DB::table("tvl_reservasi_dets")
+                    ->select("trd_kode", "tot_kode", "tot_nama as nama", "tot_alamat as alamat", "tot_kota as kota", "tot_provinsi as provinsi")
+                    ->join("tvl_objek_tujuans", "trd_tot_kode", "=", "tot_kode")
+                    ->where("trd_trh_kode", $dataHead[0]->trh_kode)
+                    ->get();
+
+                return response()->json([$dataHead, $dataDetail], 200);
+            }
+
+            // $responseData = array();
+            foreach ($dataHead->all() as $idx) {
+
+                $dataDetail = DB::table("tvl_reservasi_dets")
+                    ->select("trd_kode", "tot_kode", "tot_nama as nama", "tot_alamat as alamat", "tot_kota as kota", "tot_provinsi as provinsi")
+                    ->join("tvl_objek_tujuans", "trd_tot_kode", "=", "tot_kode")
+                    ->where("trd_trh_kode", $idx->trh_kode)
+                    ->get();
+
+                // $detailResp = array();
+                // foreach($dataDetail->all() as $idz){
+                //     $detailResp[] = $idz;
+                // }
+
+                $idx->detail = $dataDetail;
+
+                $responseData[] = $idx;
+            }
+            return  $responseData;
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Reservasi Not Found',
+            ], 404);
+        }
+    }
 }
