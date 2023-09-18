@@ -113,9 +113,8 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             $user = User::select('name')->where('email', $credentials['email'])->get();
-            $user['token'] = $request->user()->createToken('TentaAPI')->plainTextToken;
 
-            return redirect()->intended('/admin/dashboard')->with('username', $user[0]->name)->with('btoken', $user['token']);
+            return redirect()->intended('/admin/dashboard')->with('username', $user[0]->name);
         }
 
         return back()->withInput()->with('loginError', 'Login Failed!');

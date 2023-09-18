@@ -10,6 +10,7 @@ use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\TransportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\Sanctum;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +28,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 //group route daerah ==========================================================================================================================================
-Route::group(['prefix' => 'daerah', 'middleware' => 'auth:sanctum'], function(){
+Route::group(['prefix' => 'daerah'], function(){
     Route::get('/provinsi', [ProvKotaController::class, 'allProv']);
     Route::get('/kota', [ProvKotaController::class, 'kotaByProv']);
 });
@@ -49,7 +50,7 @@ Route::group(['prefix' => 'paket', 'middleware' => 'auth:sanctum'], function(){
     Route::group(['prefix' => 'head'], function(){
         Route::get('/all', [PaketController::class, 'getAllHead']);
         Route::get('/find', [PaketController::class, 'findHead']);
-        Route::get('/jenis', [PaketController::class, 'jenis']);
+        Route::get('/jenis', [PaketController::class, 'jenis'])->withoutMiddleware('auth:sanctum');
         Route::get('/search', [PaketController::class, 'searchHead']);
         Route::post('/store', [PaketController::class, 'storeHead']);
         Route::post('/update', [PaketController::class, 'updateHead']);
@@ -80,7 +81,7 @@ Route::group(['prefix' => 'objek', 'middleware' => 'auth:sanctum'], function(){
     Route::get('/all', [ObjekController::class, 'getAll']);
     Route::get('/find', [ObjekController::class, 'find']);
     Route::get('/findbyloc', [ObjekController::class, 'findByLoc']);
-    Route::get('/jenis', [ObjekController::class, 'jenis']);
+    Route::get('/jenis', [ObjekController::class, 'jenis'])->withoutMiddleware('auth:sanctum');
     // Route::post('/store', [ObjekController::class, 'store']);
     // Route::post('/update', [ObjekController::class, 'update']);
     // Route::post('/delete', [ObjekController::class, 'delete']);
@@ -90,7 +91,7 @@ Route::group(['prefix' => 'objek', 'middleware' => 'auth:sanctum'], function(){
 Route::group(['prefix' => 'reservasi', 'middleware' => 'auth:sanctum'], function(){
     Route::group(['prefix' => 'head'], function(){
         Route::get('/all', [ReservasiController::class, 'getAllHead']);
-        Route::get('/status', [ReservasiController::class, 'status']);
+        Route::get('/status', [ReservasiController::class, 'status'])->withoutMiddleware('auth:sanctum');
         Route::get('/find', [ReservasiController::class, 'findHead']);
         Route::post('/store', [ReservasiController::class, 'storeHead']);
         Route::post('/update', [ReservasiController::class, 'updateHead']);

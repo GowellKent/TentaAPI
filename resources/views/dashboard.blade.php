@@ -246,43 +246,37 @@
         </div>
     </div>
 </footer>
-            <!-- End of Footer -->
-            <?php $session_value=session('btoken') ?>
+<!-- End of Footer -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
-
-    var cData = JSON.parse(`<?php echo $chart_data; ?>`);
-
-    // console.log(session('username'))
-    var myvar='<?php echo $session_value;?>';
-    console.log(258, myvar)
-    localStorage.setItem('btoken', myvar);
-
-    console.log(261, localStorage.getItem('btoken'))
     
+    var cData = JSON.parse(`<?php echo $chart_data; ?>`);
+    
+    // console.log(session('username'))
     var maxx = cData.data.reduce((a, b) => Math.max(a, b), -Infinity) +3;
     
     // console.log(maxx)
     
     new Chart("myChart", {
-      type: "line",
-      data: {
-        labels: cData.label,
-        datasets: [{
-          fill: false,
-          lineTension: 0,
-          borderColor: "red",
-          data: cData.data
-        }
-    
+        type: "line",
+        data: {
+            labels: cData.label,
+            datasets: [{
+                fill: false,
+                lineTension: 0,
+                borderColor: "red",
+                data: cData.data
+            }
+            
         ]
-      },
-      options: {
+    },
+    options: {
         legend: {display: false},
         scales: {
-          yAxes: [{ticks: {min: 0, max:maxx}}],
+            yAxes: [{ticks: {min: 0, max:maxx}}],
         }
-      }
-    });
-    </script>
+    }
+});
+</script>
+            
 @endsection
