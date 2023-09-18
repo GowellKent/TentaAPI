@@ -10,7 +10,7 @@
     <title>
         DashTenta | {{$title}}
     </title>
-    <link rel="icon" href="images/signpost-split.svg" type="image/x-icon" style="color:antiquewhite">
+    <link rel="icon" href="/images/signpost-split.svg" type="image/x-icon" style="color:antiquewhite">
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
 
@@ -79,13 +79,13 @@
 
 
     <!-- Custom styles for this template -->
-    <link href="css/dashboard.css" rel="stylesheet">
+    <link href="/css/dashboard.css" rel="stylesheet">
 </head>
 
 <body>
 
     <header class="navbar sticky-top flex-md-nowrap p-0 shadow" style="background-color: #00BFA6;">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-4" style="color:#FFFFFF" href="/reservasi"><strong>Tenta Tour</strong></a>
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-4" style="color:#FFFFFF" href="/admin/reservasi/index"><strong>Tenta Tour</strong></a>
         <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -110,27 +110,27 @@
                         </li>
                         <hr>
                         <li class="nav-item ">
-                            <a class="nav-link" href="/reservasi">
+                            <a class="nav-link" href="/admin/reservasi/index">
                                 <h6 class="text-White align-text-center"><i class="bi bi-calendar2-week"></i>&nbsp;&nbsp;Reservasi</h6>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/paket">
+                            <a class="nav-link" href="/admin/paket/index">
                                 <h6 class="text-White align-text-center"><i class="bi bi-collection"></i>&nbsp;&nbsp;Paket Wisata</h6>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/objek">
+                            <a class="nav-link" href="/admin/objek/index">
                                 <h6 class="text-White align-text-center"><i class="bi bi-compass"></i>&nbsp;&nbsp;Objek Wisata</h6>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/bus">
+                            <a class="nav-link" href="/admin/bus/index">
                                 <h6 class="text-White align-text-center"><i class="bi bi-bus-front-fill"></i>&nbsp;&nbsp;Transportasi</h6>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/users">
+                            <a class="nav-link" href="/admin/users/index">
                                 <h6 class="text-White align-text-center"><i class="bi bi-person-rolodex"></i>&nbsp;&nbsp;Customers</h6>
                             </a>
                         </li>
@@ -165,7 +165,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
     
-    <script src="js/sidebars.js"></script>
+    <script src="/js/sidebars.js"></script>
 </body>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>

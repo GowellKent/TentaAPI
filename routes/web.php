@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FotoTransportController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ObjekController;
 use App\Http\Controllers\TransportController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,18 +30,34 @@ Route::post('/logout', [LoginController::class, 'logout']);
 Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
     // Route::get('/upfoto', [FotoTransportController::class, 'createForm']);
     // Route::post('/upfoto', [FotoTransportController::class, 'fileUpload'])->name('fileUpload');
+
+    //group function transportasi ========================================================================================================
     Route::group(['prefix' => 'transportasi'], function(){
         Route::get('/index',[TransportController::class, 'index']);
         Route::get('/detail',[TransportController::class, 'detail']);
         Route::post('/update',[TransportController::class, 'updateWeb']);
+        Route::post('/delete',[TransportController::class, 'deleteWeb']);
         Route::get('/create', function(){
             return view('transportasi.create', ['title'=>'Create Data Transportasi']);
-        })->middleware('auth');
+        });
         Route::post('/create', [TransportController::class, 'create'])->middleware('auth');
     });
-
+    
+    //group function customer ========================================================================================================
     Route::group(['prefix' => 'customer'], function(){
         Route::get('/index', [LoginController::class, 'customer']);
+    });
+
+    //group function objek  ========================================================================================================        
+    Route::group(['prefix' => 'objek'], function(){
+        Route::get('/index', [ObjekController::class, 'index']);
+        Route::get('/detail', [ObjekController::class, 'detail']);
+        Route::get('/create', function(){
+            return view('objek.create', ['title'=>'Create Objek Wisata']);
+        });
+        Route::post('/create', [ObjekController::class, 'create']);
+        Route::post('/update', [ObjekController::class, 'objekUpdate']);
+        Route::post('/delete', [ObjekController::class, 'objekDelete']);
     });
 });
 

@@ -116,19 +116,19 @@
                         </li>
                         <hr>
                         <li class="nav-item ">
-                            <a class="nav-link" href="/reservasi">
+                            <a class="nav-link" href="/admin/reservasi/index">
                                 <h6 class="text-White align-text-center"><i
                                         class="bi bi-calendar2-week"></i>&nbsp;&nbsp;Reservasi</h6>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/paket">
+                            <a class="nav-link" href="/admin/paket/index">
                                 <h6 class="text-White align-text-center"><i
                                         class="bi bi-collection"></i>&nbsp;&nbsp;Paket Wisata</h6>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/objek">
+                            <a class="nav-link" href="/admin/objek/index">
                                 <h6 class="text-White align-text-center"><i class="bi bi-compass"></i>&nbsp;&nbsp;Objek
                                     Wisata</h6>
                             </a>

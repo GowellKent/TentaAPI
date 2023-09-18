@@ -5,7 +5,7 @@
     <title>
         DashTenta | {{$title}}
     </title>
-    <link rel="icon" href="images/signpost-split.svg" type="image/x-icon" style="color: antiquewhite;">
+    <link rel="icon" href="/images/signpost-split.svg" type="image/x-icon" style="color: antiquewhite;">
 </head>
 
 <body>

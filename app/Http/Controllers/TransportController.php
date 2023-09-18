@@ -298,4 +298,35 @@ class TransportController extends Controller
         //failed save to database
         return back()->withInput()->with('CRUDError', 'Update Failed!');
     }
+
+    public function deleteWeb(Request $request, tvl_transport $bus){
+        $tt_kode = $request->input('tt_kode');
+
+        $validate = Validator::make($request->all(), [
+            'tt_kode' => 'required'
+        ]);
+
+        // response error validation
+        if ($validate->fails()) {
+            return response()->json($validate->errors(), 400);
+        }
+
+        //find objek tujuan by tt_kode
+        $bus = tvl_transport::where('tt_kode', $tt_kode)->firstOrFail();
+
+        //save to DB
+
+        if ($bus) {
+
+            $bus =    DB::table("tvl_transports")
+                ->where('tt_kode', $tt_kode)
+                ->limit(1)
+                ->delete();
+
+                return back();
+        } 
+
+        return back();
+
+    }
 }

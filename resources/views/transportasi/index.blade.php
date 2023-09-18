@@ -42,7 +42,7 @@
     function delBus(tt_kode, tt_nama) {
         let stringConfirm = "Data Transportasi \"" + tt_nama + "\" akan dihapus"
         if (confirm(stringConfirm)) {
-            fetch("/busDelete?tt_kode=" + tt_kode)
+            fetch("/admin/transportasi/delete?tt_kode=" + tt_kode)
                 .then(() => {
                     window.location.reload();
                 }).catch((err) => function() {

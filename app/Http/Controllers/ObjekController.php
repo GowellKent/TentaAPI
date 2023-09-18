@@ -204,4 +204,150 @@ class ObjekController extends Controller
             ], 409);
         }
     }
+
+    //function  Web View
+
+    public function index(){
+        $resp = DB::table("tvl_objek_tujuans")
+        ->select("tot_kode", "tjo_desc", "tot_nama", "tot_telp", "tot_alamat","tot_tp_kode", 'tp_nama', "tot_tk_kode", "tk_nama", "tot_harga")
+        ->join("tvl_jenis_objeks", "tot_tjo_kode", "=", "tjo_kode")
+        ->join("tvl_provinsis", "tot_tp_kode", "=", "tp_kode")
+        ->join("tvl_kotas", "tot_tk_kode", "=", "tk_kode")
+        ->orderBy("tot_kode")
+        ->get();
+
+        return view('objek.index', ['title'=>'Objek Wisata', 'response'=>$resp]);
+    }
+
+    function create(Request $request){
+        $validate = Validator::make($request->all(), [
+            'tot_tjo_kode' => 'required',
+            'tot_nama' => 'required',
+            'tot_provinsi' => 'required',
+            'tot_kota' => 'required',
+            'tot_harga' => 'required',
+        ]);
+
+        //response error validation
+        if ($validate->fails()) {
+            return back()->withInput()->with('CRUDError', 'Create Data Failed!');
+        }
+
+        // $data = array_keys((array)$request->input());
+        $resp = DB::table("tvl_objek_tujuans")->max('tot_kode') + 1 ;
+
+        $data = array();
+        foreach (array_keys((array)$request->input()) as $value) {
+            $data[$value] = $request->input($value);
+            $data['tot_kode'] = $resp;
+        }
+
+
+        //save to DB
+        $objekTujuan = tvl_objek_tujuan::create($data);
+
+        if ($objekTujuan) {
+
+            return redirect()->intended('/objek');
+        }
+
+        //failed save to database
+        return back()->withInput()->with('CRUDError', 'Create Data Failed!');
+    }
+
+    function detail(Request $request){
+        
+        $validate = Validator::make($request->all(), [
+            'tot_kode' => 'required'
+        ]);
+        
+        //response error validation
+        if ($validate->fails()) {
+            return back();
+        }
+        
+        $id = $request->input('tot_kode');
+
+        $resp = DB::table('tvl_objek_tujuans')
+            ->select("*", "tjo_desc")
+            ->join("tvl_jenis_objeks", "tot_tjo_kode", "=", "tjo_kode")
+            ->where('tot_kode', $id)
+            ->get();
+
+        if(count($resp->all()) > 0){
+            return view('objek.detail', ['response'=>$resp, 'title'=>'Detail Objek']);
+        }
+        else{
+            return back();
+        }
+    }
+
+    function objekUpdate(Request $request, tvl_objek_tujuan $objek){
+        $tot_kode = $request->input('tot_kode');
+
+        $validate = Validator::make($request->all(), [
+            'tot_kode' => 'required'
+        ]);
+
+        // response error validation
+        if ($validate->fails()) {
+            return back()->withInput()->with('CRUDError', 'Update Failed!');
+        }
+
+        //find objek tujuan by tot_kode
+        $objek = tvl_objek_tujuan::where('tot_kode', $tot_kode)->firstOrFail();
+
+        //save to DB
+
+        if ($objek) {
+
+            $data = array();
+            foreach (array_keys((array)$request->except('_token')) as $value) {
+                $data[$value] = $request->input($value);
+            }
+
+            $objek = DB::table("tvl_objek_tujuans")
+                ->where('tot_kode', $tot_kode)
+                ->limit(1)
+                ->update($data);
+
+                return redirect()->intended('/objek');
+        }
+
+        //failed save to database
+        return back()->withInput()->with('CRUDError', 'Update Failed!');
+    }
+
+    
+    function objekDelete(Request $request, tvl_objek_tujuan $objek){
+
+        $tot_kode = $request->input('tot_kode');
+
+        $validate = Validator::make($request->all(), [
+            'tot_kode' => 'required'
+        ]);
+
+        // response error validation
+        if ($validate->fails()) {
+            return back()->withInput()->with('CRUDError', 'Create Data Failed!');
+        }
+
+        //find objek tujuan by tot_kode
+        $objek = tvl_objek_tujuan::where('tot_kode', $tot_kode)->firstOrFail();
+
+        //save to DB
+
+        if ($objek) {
+
+            $objek =    DB::table("tvl_objek_tujuans")
+                ->where('tot_kode', $tot_kode)
+                ->limit(1)
+                ->delete();
+
+            return redirect()->intended('/admin/objek/index');
+        } else {
+            //failed save to database
+            return back()->withInput()->with('CRUDError', 'Create Data Failed!');
+        }
+    }
 }

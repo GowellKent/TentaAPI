@@ -26,11 +26,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//group route daerah ==========================================================================================================================================
 Route::group(['prefix' => 'daerah', 'middleware' => 'auth:sanctum'], function(){
     Route::get('/provinsi', [ProvKotaController::class, 'allProv']);
     Route::get('/kota', [ProvKotaController::class, 'kotaByProv']);
 });
 
+//group route admin ==========================================================================================================================================
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'isAdmin']], function(){
     Route::group(['prefix' => 'fottran'], function(){
         Route::post('/delete', [FotoTransportController::class, 'delFoto']);
@@ -42,6 +44,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'isAdmin']],
     });
 });
 
+//group route paket ==========================================================================================================================================
 Route::group(['prefix' => 'paket', 'middleware' => 'auth:sanctum'], function(){
     Route::group(['prefix' => 'head'], function(){
         Route::get('/all', [PaketController::class, 'getAllHead']);
@@ -61,6 +64,8 @@ Route::group(['prefix' => 'paket', 'middleware' => 'auth:sanctum'], function(){
 
     });
 });
+
+//group route transport ==========================================================================================================================================
 Route::group(['prefix' => 'transport', 'middleware' => 'auth:sanctum'], function(){
     Route::get('/all', [TransportController::class, 'getAll']);
     Route::get('/find', [TransportController::class, 'find']);
@@ -70,6 +75,7 @@ Route::group(['prefix' => 'transport', 'middleware' => 'auth:sanctum'], function
     Route::post('/search', [TransportController::class, 'searchByRoute']);
 });
 
+//group route objek ==========================================================================================================================================
 Route::group(['prefix' => 'objek', 'middleware' => 'auth:sanctum'], function(){
     Route::get('/all', [ObjekController::class, 'getAll']);
     Route::get('/find', [ObjekController::class, 'find']);
@@ -80,6 +86,7 @@ Route::group(['prefix' => 'objek', 'middleware' => 'auth:sanctum'], function(){
     // Route::post('/delete', [ObjekController::class, 'delete']);
 });
 
+//group route reservasi ==========================================================================================================================================
 Route::group(['prefix' => 'reservasi', 'middleware' => 'auth:sanctum'], function(){
     Route::group(['prefix' => 'head'], function(){
         Route::get('/all', [ReservasiController::class, 'getAllHead']);
@@ -92,6 +99,7 @@ Route::group(['prefix' => 'reservasi', 'middleware' => 'auth:sanctum'], function
     });
 });
 
+//group route login ==========================================================================================================================================
 Route::post('/register', [LoginController::class, 'register']);
 Route::post('/login', [LoginController::class, 'authenticate']);
 Route::post('/logout', [LoginController::class, 'logoutAPI']);
