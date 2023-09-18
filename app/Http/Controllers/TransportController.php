@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class TransportController extends Controller
 {
-    //
+    //api controllers
     function getAll(){
         return tvl_transport::all();
     }
@@ -98,7 +98,7 @@ class TransportController extends Controller
             return response()->json($validate->errors(), 400);
         }
 
-        //find objek tujuan by tb_kode
+        //find objek tujuan by tt_kode
         $transport = tvl_transport::where('tt_kode', $tt_kode)->firstOrFail();
 
         //save to DB
@@ -192,5 +192,110 @@ class TransportController extends Controller
 
             ], 404);
         }
+    }
+
+
+    // web controllers
+
+    public function index(){
+        $resp = DB::table("tvl_transports")
+        ->get();
+        return view('transportasi.index',['response' => $resp, 'title'=>'Daftar Transportasi']);
+    }
+
+    public function create(Request $request){
+        $validate = Validator::make($request->all(), [
+            'tt_nama' => 'required',
+            'tt_kota_asal' => 'required',
+            'tt_kota_tujuan' => 'required',
+            'tt_pax' => 'required'
+        ]);
+
+        //response error validation
+        if ($validate->fails()) {
+            return back()->withInput()->with('CRUDError', 'Create Data Failed!');
+        }
+
+        // $data = array_keys((array)$request->input());
+        $resp = DB::table("tvl_transports")->max('tt_kode') + 1 ;
+
+        $data = array();
+        foreach (array_keys((array)$request->input()) as $value) {
+            $data[$value] = $request->input($value);
+            $data['tt_kode'] = $resp;
+        }
+
+
+        //save to DB
+        $bus = tvl_transport::create($data);
+
+        if ($bus) {
+            return redirect()->intended('/admin/transportasi/index');
+        }
+
+        //failed save to database
+        return back()->withInput()->with('CRUDError', 'Create Data Failed!');
+    }
+
+    public function detail(Request $request){
+        
+        $validate = Validator::make($request->all(), [
+            'tt_kode' => 'required'
+        ]);
+        
+        //response error validation
+        if ($validate->fails()) {
+            return response()->json($validate->errors(), 400);
+        }
+        
+        $id = $request->input('tt_kode');
+
+        $resp = DB::table('tvl_transports')
+            ->where('tt_kode', $id)
+            ->get();
+
+        if(count($resp->all()) > 0){
+            return view('transportasi.detail', ['response'=>$resp, 'title'=>'Detail Transportasi']);
+        }
+    }
+
+    public function updateWeb(Request $request, tvl_transport $bus){
+
+        $tt_kode = $request->input('tt_kode');
+
+        $validate = Validator::make($request->all(), [
+            'tt_kode' => 'required'
+        ]);
+
+        // response error validation
+        if ($validate->fails()) {
+            return back()->withInput()->with('CRUDError', 'Update Failed!');
+        }
+
+        //find objek tujuan by tt_kode
+        $bus = tvl_transport::where('tt_kode', $tt_kode)->firstOrFail();
+
+        //save to DB
+
+        if ($bus) {
+
+            $data = array();
+            foreach (array_keys((array)$request->except(['_token'])) as $value) {
+                $data[$value] = $request->input($value);
+            }
+
+            $bus = DB::table("tvl_transports")
+                ->where('tt_kode', $tt_kode)
+                ->limit(1)
+                ->update($data);
+
+            // $request->session()->regenerate();
+            return redirect()->intended('admin/transportasi/index');
+
+            // return view('bus.index');
+        }
+
+        //failed save to database
+        return back()->withInput()->with('CRUDError', 'Update Failed!');
     }
 }

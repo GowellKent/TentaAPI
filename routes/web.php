@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FotoTransportController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\TransportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,8 +27,17 @@ Route::post('/login', [LoginController::class, 'authweb']);
 Route::post('/logout', [LoginController::class, 'logout']);
 
 Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
-    Route::get('/upfoto', [FotoTransportController::class, 'createForm']);
-    Route::post('/upfoto', [FotoTransportController::class, 'fileUpload'])->name('fileUpload');
+    // Route::get('/upfoto', [FotoTransportController::class, 'createForm']);
+    // Route::post('/upfoto', [FotoTransportController::class, 'fileUpload'])->name('fileUpload');
+    Route::group(['prefix' => 'transportasi'], function(){
+        Route::get('/index',[TransportController::class, 'index']);
+        Route::get('/detail',[TransportController::class, 'detail']);
+        Route::post('/update',[TransportController::class, 'updateWeb']);
+        Route::get('/create', function(){
+            return view('transportasi.create', ['title'=>'Create Data Transportasi']);
+        })->middleware('auth');
+        Route::post('/create', [TransportController::class, 'create'])->middleware('auth');
+    });
 });
 
 Route::get('/testchart', [LoginController::class, 'chartJs']);
