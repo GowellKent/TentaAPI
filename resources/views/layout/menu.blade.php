@@ -10,7 +10,7 @@
     <title>
         DashTenta | {{ $title }}
     </title>
-    <link rel="icon" href="images/signpost-split.svg" type="image/x-icon" style="color:antiquewhite">
+    <link rel="icon" href="/images/signpost-split.svg" type="image/x-icon" style="color:antiquewhite">
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
 
@@ -81,7 +81,7 @@
 
 
     <!-- Custom styles for this template -->
-    <link href="css/dashboard.css" rel="stylesheet">
+    <link href="/css/dashboard.css" rel="stylesheet">
 </head>
 
 <body>
@@ -134,13 +134,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/bus">
+                            <a class="nav-link" href="/admin/transportasi/index">
                                 <h6 class="text-White align-text-center"><i
                                         class="bi bi-bus-front-fill"></i>&nbsp;&nbsp;Transportasi</h6>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/users">
+                            <a class="nav-link" href="/admin/customer/index">
                                 <h6 class="text-White align-text-center"><i
                                         class="bi bi-person-rolodex"></i>&nbsp;&nbsp;Customers</h6>
                             </a>
@@ -190,7 +190,7 @@
         integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous">
     </script> -->
     <!-- <script src="js/dashboard.js"></script> -->
-    <script src="js/sidebars.js"></script>
+    <script src="/js/sidebars.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {

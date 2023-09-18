@@ -156,4 +156,11 @@ class LoginController extends Controller
     return view('chart-js', $data);
     }
 
+    public function customer(){
+        $resp = DB::table("users")
+        ->where('role', '0')
+        ->get();
+        return view('customer.index', ['response'=>$resp, 'title'=>'Customers']);
+    }
+
 }

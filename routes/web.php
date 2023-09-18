@@ -38,6 +38,10 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
         })->middleware('auth');
         Route::post('/create', [TransportController::class, 'create'])->middleware('auth');
     });
+
+    Route::group(['prefix' => 'customer'], function(){
+        Route::get('/index', [LoginController::class, 'customer']);
+    });
 });
 
 Route::get('/testchart', [LoginController::class, 'chartJs']);
