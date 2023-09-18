@@ -31,6 +31,10 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
     // Route::get('/upfoto', [FotoTransportController::class, 'createForm']);
     // Route::post('/upfoto', [FotoTransportController::class, 'fileUpload'])->name('fileUpload');
 
+    Route::get('/dashboard',function(){
+        return view('dashboard', ['title'=>'Dashboard']);
+    });
+
     //group function transportasi ========================================================================================================
     Route::group(['prefix' => 'transportasi'], function(){
         Route::get('/index',[TransportController::class, 'index']);
@@ -62,6 +66,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
 });
 
 Route::get('/testchart', [LoginController::class, 'chartJs']);
+
 
 // Route::get('/upFoto', [FotoTransportController::class, 'createForm']);
 // Route::post('/upFoto', [FotoTransportController::class, 'fileUpload'])->name('fileUpload');
