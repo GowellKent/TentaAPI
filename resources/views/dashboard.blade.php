@@ -247,15 +247,18 @@
     </div>
 </footer>
             <!-- End of Footer -->
-
+            <?php $session_value=session('btoken') ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
-    const xValues = [50,60,70,80,90,100,110,120,130,140,150];
-    const yValues = [7,8,8,9,9,9,10,11,14,14,15];
-    
+
     var cData = JSON.parse(`<?php echo $chart_data; ?>`);
-    
-    // console.log(cData)
+
+    // console.log(session('username'))
+    var myvar='<?php echo $session_value;?>';
+    console.log(258, myvar)
+    localStorage.setItem('btoken', myvar);
+
+    console.log(261, localStorage.getItem('btoken'))
     
     var maxx = cData.data.reduce((a, b) => Math.max(a, b), -Infinity) +3;
     

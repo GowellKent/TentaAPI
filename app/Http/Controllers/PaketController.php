@@ -405,4 +405,173 @@ class PaketController extends Controller
             ], 409);
         }
     }
+    // ===================================================================================================================================
+    // Web Controller functions
+    // ===================================================================================================================================
+    
+    public function index()
+    {
+
+        $resp = DB::table("tvl_paket_heads")
+            ->select("tph_kode", "tjt_desc", "tph_nama", "tph_durasi", "tph_harga", "tph_provinsi_asal", "tph_provinsi_tujuan", "tph_kota_tujuan", "tph_kota_asal")
+            ->join("tvl_jenis_trips", "tph_tjt_kode", "=", "tjt_kode")
+            ->orderBy("tph_kode")
+            ->get();
+
+        return view('paket.index', ['title' => 'Paket Wisata', 'response' => $resp]);
+        // return tvl_paket_head::all();
+    }
+
+    function paketCreate(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'tph_tjt_kode' => 'required',
+            'tph_nama' => 'required',
+            'tph_durasi' => 'required',
+            'tph_provinsi_asal' => 'required',
+            'tph_kota_asal' => 'required',
+            'tph_provinsi_tujuan' => 'required',
+            'tph_kota_tujuan' => 'required',
+            'tph_min_pax' => 'required',
+            'tph_max_pax' => 'required'
+        ]);
+
+        //response error validation
+        if ($validate->fails()) {
+            return back()->withInput()->with("CRUDError", "Insert Paket Failed !");
+        }
+
+        // $data = array_keys((array)$request->input());
+        $resp = DB::table("tvl_paket_heads")->max('tph_kode') + 1;
+
+        $data = array();
+        foreach (array_keys((array)$request->except('_token')) as $value) {
+            $data[$value] = $request->input($value);
+            $data['tph_kode'] = $resp;
+            $data['tph_harga'] = 0;
+        }
+
+
+        //save to DB
+        $paketHead = tvl_paket_head::create($data);
+
+        if ($paketHead) {
+            $redirectURL = (string)'/paketDetail?tph_kode='.$resp;
+            return redirect($redirectURL);
+        }
+
+        //failed save to database
+        return back()->withInput()->with("CRUDError", "Insert Paket Failed !");
+    }
+
+    function paketDelete(Request $request, tvl_paket_head $paket)
+    {
+
+        $tph_kode = $request->input('tph_kode');
+
+        $validate = Validator::make($request->all(), [
+            'tph_kode' => 'required'
+        ]);
+
+        // response error validation
+        if ($validate->fails()) {
+            return back()->withInput()->with("CRUDError", "Delete Paket Failed !");
+        }
+
+        //find paket tujuan by tph_kode
+        $paket = tvl_paket_head::where('tph_kode', $tph_kode)->firstOrFail();
+        // $det = tvl_paket_det::where("tpd_tph_kode", $tph_kode);
+
+        //save to DB
+
+        if ($paket) {
+
+            $paket =    DB::table("tvl_paket_heads")
+                ->where('tph_kode', $tph_kode)
+                ->limit(1)
+                ->delete();
+
+
+            return redirect()->intended('/paket');
+        } else {
+            //failed save to database
+            return back()->withInput()->with("CRUDError", "Delete Paket Failed !");
+        }
+    }
+
+    function paketDetail(Request $request)
+    {
+
+        $validate = Validator::make($request->all(), [
+            'tph_kode' => 'required',
+        ]);
+
+        //response error validation
+        if ($validate->fails()) {
+            return back();
+        }
+
+        $tph_kode = $request->input("tph_kode");
+
+        $resp = DB::table("tvl_paket_heads")
+            ->select("*", "tjt_desc")
+            ->join("tvl_jenis_trips", "tph_tjt_kode", "=", "tjt_kode")
+            ->where("tph_kode", $tph_kode)
+            ->get();
+
+        $respDetail = DB::table('tvl_paket_dets')
+            ->select("tpd_kode", "tot_kode", "tot_nama", "tot_alamat", "tot_tk_kode", "tk_nama", "tot_tp_kode", "tp_nama", "tot_tjo_kode", "tjo_desc", "tot_harga", "tpd_hari", "tpd_jam")
+            ->join('tvl_objek_tujuans', 'tpd_tot_kode', '=', 'tot_kode')
+            ->join('tvl_jenis_objeks', 'tot_tjo_kode', '=', 'tjo_kode')
+            ->join('tvl_kotas', 'tot_tk_kode', '=', 'tk_kode')
+            ->join('tvl_provinsis', 'tot_tp_kode', '=', 'tp_kode')
+            ->where('tpd_tph_kode',  $tph_kode)
+            ->get();
+
+        if (count($resp->all()) > 0) {
+            return view('paket.detail', ['response' => $resp, 'title' => 'Detail Paket Wisata', 'responseDet'=>$respDetail]);
+        }
+        else {
+            return back();
+        }
+    }
+
+    function paketUpdate(Request $request, tvl_paket_head $paket)
+    {
+        $tph_kode = $request->input('tph_kode');
+
+
+        $validate = Validator::make($request->all(), [
+            'tph_kode' => 'required'
+        ]);
+
+        // response error validation
+        if ($validate->fails()) {
+            return back()->withInput()->with("CRUDError", "Update Paket Failed!");
+        }
+
+        //find paket tujuan by tph_kode
+        $paket = tvl_paket_head::where('tph_kode', $tph_kode)->firstOrFail();
+
+        //save to DB
+
+        if ($paket) {
+
+            $data = array();
+            foreach (array_keys((array)$request->except("_token")) as $value) {
+                $data[$value] = $request->input($value);
+            }
+
+            $paket =    DB::table("tvl_paket_heads")
+                ->where('tph_kode', $tph_kode)
+                ->limit(1)
+                ->update($data);
+
+            return redirect()->intended('/paket');
+        }
+
+        //failed save to database
+        return back()->withInput()->with("CRUDError", "Update Paket Failed!");
+
+    }
 }

@@ -94,7 +94,7 @@
             <div class="nav-item text-nowrap">
                 <form action="/logout" method="POST">
                     @csrf
-                    <button class="btn btn-link mt-3" type="submit" style="color:#FFFFFF">Sign out</button>
+                    <button class="btn btn-link mt-3" type="submit" style="color:#FFFFFF" onclick="clr()">Sign out</button>
                 </form>
             </div>
         </div>
@@ -175,5 +175,9 @@
   document.addEventListener('DOMContentLoaded', () => {
     $('.alert').alert()
   })
+
+  function clr(){
+    localStorage.clear();
+  }
 </script>
 </html>

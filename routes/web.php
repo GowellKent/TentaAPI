@@ -3,6 +3,7 @@
 use App\Http\Controllers\FotoTransportController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ObjekController;
+use App\Http\Controllers\PaketController;
 use App\Http\Controllers\TransportController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +53,18 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
     //group function customer ========================================================================================================
     Route::group(['prefix' => 'customer'], function(){
         Route::get('/index', [LoginController::class, 'customer']);
+    });
+    
+    //group function PAKET ========================================================================================================
+    Route::group(['prefix' => 'paket'], function(){
+        Route::get('/index', [PaketController::class, 'index']);
+        Route::get('/detail', [PaketController::class, 'paketDetail']);
+        Route::get('/create',  function(){
+            return view('paket.create', ['title'=>'Create Paket Wisata']);
+        });
+        Route::post('/create', [PaketController::class, 'paketCreate']);
+        Route::post('/delete', [PaketController::class, 'paketDelete']);
+        Route::post('/update', [PaketController::class, 'paketUpdate']);
     });
 
     //group function objek  ========================================================================================================        

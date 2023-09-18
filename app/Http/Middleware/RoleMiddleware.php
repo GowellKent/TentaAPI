@@ -25,7 +25,7 @@ class RoleMiddleware
             }
             //if user is NOT ADMIN (0)
             else{
-                return redirect('/home')->with('message', 'User Unauthorized !');
+                return redirect('/login')->with('message', 'User Unauthorized !');
             }
         }else{
             return redirect('/login')->with('message', 'User Unauthenticated !');
