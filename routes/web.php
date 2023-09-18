@@ -43,7 +43,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
         Route::get('/index',[TransportController::class, 'index']);
         Route::get('/detail',[TransportController::class, 'detail']);
         Route::post('/update',[TransportController::class, 'updateWeb']);
-        Route::post('/delete',[TransportController::class, 'deleteWeb']);
+        Route::get('/delete',[TransportController::class, 'deleteWeb']);
         Route::get('/create', function(){
             return view('transportasi.create', ['title'=>'Create Data Transportasi']);
         });
@@ -63,7 +63,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
             return view('paket.create', ['title'=>'Create Paket Wisata']);
         });
         Route::post('/create', [PaketController::class, 'paketCreate']);
-        Route::post('/delete', [PaketController::class, 'paketDelete']);
+        Route::get('/delete', [PaketController::class, 'paketDelete']);
         Route::post('/update', [PaketController::class, 'paketUpdate']);
     });
 
@@ -76,7 +76,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
         });
         Route::post('/create', [ObjekController::class, 'create']);
         Route::post('/update', [ObjekController::class, 'objekUpdate']);
-        Route::post('/delete', [ObjekController::class, 'objekDelete']);
+        Route::get('/delete', [ObjekController::class, 'objekDelete']);
     });
 });
 

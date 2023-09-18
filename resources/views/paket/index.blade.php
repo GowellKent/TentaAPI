@@ -48,7 +48,7 @@
     function delBus(tph_kode) {
         let stringConfirm = "Data Paket " + tph_kode + " akan dihapus"
         if (confirm(stringConfirm)) {        // console.log(tph_kode)
-        fetch("admin/paket/delete?tph_kode=" + tph_kode)
+        fetch("/admin/paket/delete?tph_kode=" + tph_kode)
             .then(() => {
                 window.location.reload();
             }).catch((err) => function() {
