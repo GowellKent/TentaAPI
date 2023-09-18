@@ -112,7 +112,9 @@ class LoginController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect()->intended('/');
+            $user = User::select('name')->where('email', $credentials['email'])->get();
+
+            return redirect()->intended('/admin/dashboard')->with('username', $user[0]->name);
         }
 
         return back()->withInput()->with('loginError', 'Login Failed!');
@@ -138,22 +140,22 @@ class LoginController extends Controller
 
     }
 
-    public function chartJS(){
-        $record = User::select(DB::raw("COUNT(*) as count"), DB::raw("DAYNAME(created_at) as day_name"), DB::raw("DAY(created_at) as day"))
+    public function dashboard(){
+        $record = User::select(DB::raw("COUNT(*) as count"), DB::raw("MONTHNAME(created_at) as month_name"), DB::raw("MONTH(created_at) as day"))
     // ->where('created_at', '>', Carbon::today()->subDay(6))
-    ->groupBy('day_name','day')
+    ->groupBy('month_name','day')
     ->orderBy('day')
     ->get();
   
      $data = [];
  
      foreach($record as $row) {
-        $data['label'][] = $row->day_name;
+        $data['label'][] = $row->month_name;
         $data['data'][] = (int) $row->count;
       }
  
     $data['chart_data'] = json_encode($data);
-    return view('chart-js', $data);
+    return view('dashboard', $data)->with('title', 'Dashboard');
     }
 
     public function customer(){

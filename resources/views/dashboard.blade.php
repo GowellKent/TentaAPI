@@ -1,11 +1,11 @@
-@extends('layout/menu')
+@extends('layout/form')
 @section('container')
 <!-- Begin Page Content -->
     <div class="container-fluid">
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-end justify-content-between mb-4">
-            {{-- <h1 class="h3 mb-0 text-gray-800">Dashboard</h1> --}}
+            <h1 class="h3 mb-0 text-gray-800">Welcome, {{session('username')}}! </h1>
             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
                     class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
         </div>
@@ -108,25 +108,11 @@
                     <div
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #00BFA6;">
                         <h6 class="m-0 font-weight-bold text-light">Earnings Overview</h6>
-                        {{-- <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Dropdown Header:</div>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div> --}}
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
                         <div class="chart-area">
-                            <canvas id="myAreaChart"></canvas>
+                            <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
                         </div>
                     </div>
                 </div>
@@ -139,20 +125,6 @@
                     <div
                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #00BFA6;">
                         <h6 class="m-0 font-weight-bold text-light">Revenue Sources</h6>
-                        <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Dropdown Header:</div>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
                     </div>
                     <!-- Card Body -->
                     <div class="card-body">
@@ -275,4 +247,39 @@
     </div>
 </footer>
             <!-- End of Footer -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script>
+    const xValues = [50,60,70,80,90,100,110,120,130,140,150];
+    const yValues = [7,8,8,9,9,9,10,11,14,14,15];
+    
+    var cData = JSON.parse(`<?php echo $chart_data; ?>`);
+    
+    // console.log(cData)
+    
+    var maxx = cData.data.reduce((a, b) => Math.max(a, b), -Infinity) +3;
+    
+    // console.log(maxx)
+    
+    new Chart("myChart", {
+      type: "line",
+      data: {
+        labels: cData.label,
+        datasets: [{
+          fill: false,
+          lineTension: 0,
+          borderColor: "red",
+          data: cData.data
+        }
+    
+        ]
+      },
+      options: {
+        legend: {display: false},
+        scales: {
+          yAxes: [{ticks: {min: 0, max:maxx}}],
+        }
+      }
+    });
+    </script>
 @endsection

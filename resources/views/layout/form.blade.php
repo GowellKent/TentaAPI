@@ -106,7 +106,9 @@
                 <div class="position-sticky pt-3 px-3 sidebar-sticky">
                     <ul class="nav nav-pills flex-column">
                         <li class="nav-item align-text-center">
-                            <h5 class="text-White align-text-center mt-4"><strong>Dashboard</strong></h5>
+                            <a class="nav-link" href="/admin/dashboard">
+                                <h5 class="text-White align-text-center mt-4"><strong>Dashboard</strong></h5>
+                            </a>
                         </li>
                         <hr>
                         <li class="nav-item ">
@@ -125,7 +127,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/bus/index">
+                            <a class="nav-link" href="/admin/transportasi/index">
                                 <h6 class="text-White align-text-center"><i class="bi bi-bus-front-fill"></i>&nbsp;&nbsp;Transportasi</h6>
                             </a>
                         </li>
