@@ -5,7 +5,7 @@
     {{-- <body style="background-color: #F0f0f0;"> --}}
         <div class="card mx-auto mt-5" style="width: 40rem;">
             <div class="card-body">
-                <form action="/busCreate" method="post">
+                <form action="/admin/transportasi/create" method="post">
                     @csrf
                     <div class="form-floating my-3">
                         <input type="text" name="tt_kode" class="form-control" readonly value="AUTO"
@@ -24,8 +24,8 @@
                     <div class="row my-3">
                         <div class="col">
                             <div class="form-floating">
-                                <select class="form-control" id="floatingtt_prov_asal">
-                                    <option value=null>--Provinsi Asal--</option>
+                                <select name="tt_tp_kode_asal" class="form-control" id="floatingtt_prov_asal">
+                                    <option value={{old('tt_tp_kode_asal')}}>--Provinsi Asal--</option>
                                 </select>
                                 <label for="floatingtt_prov_asal">
                                     <h6>Provinsi Asal</h6>
@@ -34,8 +34,8 @@
                         </div>
                         <div class="col">
                             <div class="form-floating">
-                                <select name="tt_kota_asal" class="form-control" id="floatingtt_kota_asal">
-                                    <option value="{{ old('tt_kota_asal') }}">--Select--</option>
+                                <select name="tt_tk_kode_asal" class="form-control" id="floatingtt_kota_asal">
+                                    <option value="{{ old('tt_tk_kode_asal') }}">--Select--</option>
                                 </select>
                                 <label for="floatingtt_kota_asal">
                                     <h6>Kota Asal</h6>
@@ -46,8 +46,8 @@
                     <div class="row my-3">
                         <div class="col">
                             <div class="form-floating">
-                                <select class="form-control" id="floatingtt_prov_tujuan">
-                                    <option value=null>--Provinsi Tujuan--</option>
+                                <select name="tt_tp_kode_tujuan" class="form-control" id="floatingtt_prov_tujuan">
+                                    <option value={{old('tt_tp_kode_tujuan')}}>--Provinsi Tujuan--</option>
                                 </select>
                                 <label for="floatingtt_prov_tujuan">
                                     <h6>Provinsi Tujuan</h6>
@@ -56,8 +56,8 @@
                         </div>
                         <div class="col">
                             <div class="form-floating">
-                                <select name="tt_kota_tujuan" class="form-control" id="floatingtt_kota_tujuan">
-                                    <option value="{{old('tt_kota_tujuan')}}">--Select--</option>
+                                <select name="tt_tk_kode_tujuan" class="form-control" id="floatingtt_kota_tujuan">
+                                    <option value="{{old('tt_tk_kode_tujuan')}}">--Select--</option>
                                 </select>
                                 <label for="floatingtt_kota_tujuan">
                                     <h6>Kota Tujuan</h6>
@@ -93,21 +93,22 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        fetch("https://dev.farizdotid.com/api/daerahindonesia/provinsi")
+        // fetch("https://dev.farizdotid.com/api/daerahindonesia/")
+        fetch("/api/daerah/provinsi")
             .then((response) => {
                 return response.json();
             })
             .then((data) => {
-                let listProvinsi = data.provinsi
-                $('#floatingtt_prov_asal').append(listProvinsi.map(function(provs) {
+                $('#floatingtt_prov_asal').append(data.map(function(provs) {
                         return $('<option>', {
-                            text: provs.nama,
-                            value: provs.id
+                            text: provs.tp_nama,
+                            value: provs.tp_kode
                         })
                     }))
                     .change(function() {
                         // console.log("prov asal ", this.value)
-                        fetch('https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=' + this
+                        // fetch('https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=' + this
+                        fetch('/api/daerah/kota?id_provinsi=' + this
                                 .value, {
                                     method: "GET"
                                 })
@@ -116,12 +117,12 @@
                             })
                             .then((data) => {
                                 // console.log(data.kota_kabupaten)
-                                let listKotaAsal = data.kota_kabupaten
+                                // let listKotaAsal = data.kota_kabupaten
                                 $('#floatingtt_kota_asal').empty();
-                                $('#floatingtt_kota_asal').append(listKotaAsal.map(function(kota) {
+                                $('#floatingtt_kota_asal').append(data.map(function(kota) {
                                         return $('<option>', {
-                                            text: kota.nama,
-                                            value: kota.nama
+                                            text: kota.tk_nama,
+                                            value: kota.tk_kode
                                         })
                                     }))
                                     .change(function() {
@@ -129,28 +130,26 @@
                                     })
                             })
                     })
-                $('#floatingtt_prov_tujuan').append(listProvinsi.map(function(provs) {
+                $('#floatingtt_prov_tujuan').append(data.map(function(provs) {
                         return $('<option>', {
-                            text: provs.nama,
-                            value: provs.id
+                            text: provs.tp_nama,
+                            value: provs.tp_kode
                         })
                     }))
                     .change(function() {
                         // console.log("prov tujuan ", this.value)
-                        fetch('https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=' + this
+                        fetch('/api/daerah/kota?id_provinsi=' + this
                                 .value)
                             .then((response) => {
                                 return response.json();
                             })
                             .then((data) => {
                                 // console.log(data.kota_kabupaten)
-                                let listKotaTujuan = data.kota_kabupaten
                                 $('#floatingtt_kota_tujuan').empty();
-                                $('#floatingtt_kota_tujuan').append(listKotaTujuan.map(function(
-                                        kota) {
+                                $('#floatingtt_kota_tujuan').append(data.map(function(kota) {
                                         return $('<option>', {
-                                            text: kota.nama,
-                                            value: kota.nama
+                                            text: kota.tk_nama,
+                                            value: kota.tk_kode
                                         })
                                     }))
                                     .change(function() {

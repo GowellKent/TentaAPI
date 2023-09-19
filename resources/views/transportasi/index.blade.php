@@ -24,7 +24,7 @@
                     <tr class="align-middle">
                         <td>{{ $response->tt_kode }}</td>
                         <td><a href="{{ '/admin/transportasi/detail?tt_kode=' . $response->tt_kode }}">{{ $response->tt_nama }}</a></td>
-                        <td>{{ $response->tt_kota_asal }}</td>
+                        <td>{{ $response->tt_kota_asal}}</td>
                         <td>{{ $response->tt_kota_tujuan }}</td>
                         <td>{{ $response->tt_pax }}</td>
                         <td>Rp {{ $response->tt_harga }}</td>

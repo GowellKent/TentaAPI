@@ -199,6 +199,11 @@ class TransportController extends Controller
 
     public function index(){
         $resp = DB::table("tvl_transports")
+        ->select('tt_kode', 'tt_nama', 'c.tk_nama as tt_kota_asal', 'd.tk_nama as  tt_kota_tujuan', 'tt_pax', 'tt_harga')
+        ->join("tvl_provinsis as a", "tt_tp_kode_asal", "=", "a.tp_kode")
+        ->join("tvl_provinsis as b", "tt_tp_kode_tujuan", "=", "b.tp_kode")
+        ->join("tvl_kotas as c", "tt_tk_kode_asal", "=", "c.tk_kode")
+        ->join("tvl_kotas as d", "tt_tk_kode_tujuan", "=", "d.tk_kode")
         ->get();
         return view('transportasi.index',['response' => $resp, 'title'=>'Daftar Transportasi']);
     }
@@ -206,8 +211,10 @@ class TransportController extends Controller
     public function create(Request $request){
         $validate = Validator::make($request->all(), [
             'tt_nama' => 'required',
-            'tt_kota_asal' => 'required',
-            'tt_kota_tujuan' => 'required',
+            'tt_tp_kode_asal' => 'required',
+            'tt_tk_kode_asal' => 'required',
+            'tt_tp_kode_tujuan' => 'required',
+            'tt_tk_kode_tujuan' => 'required',
             'tt_pax' => 'required'
         ]);
 
