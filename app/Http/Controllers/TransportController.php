@@ -258,8 +258,13 @@ class TransportController extends Controller
         $id = $request->input('tt_kode');
 
         $resp = DB::table('tvl_transports')
-            ->where('tt_kode', $id)
-            ->get();
+        ->select('tt_kode', 'tt_nama','tt_tp_kode_asal', 'tt_tp_kode_tujuan', 'tt_tk_kode_asal', 'tt_tk_kode_tujuan','a.tp_nama as tt_provinsi_asal', 'b.tp_nama as tt_provinsi_tujuan', 'c.tk_nama as tt_kota_asal', 'd.tk_nama as  tt_kota_tujuan', 'tt_pax', 'tt_harga')
+        ->join("tvl_provinsis as a", "tt_tp_kode_asal", "=", "a.tp_kode")
+        ->join("tvl_provinsis as b", "tt_tp_kode_tujuan", "=", "b.tp_kode")
+        ->join("tvl_kotas as c", "tt_tk_kode_asal", "=", "c.tk_kode")
+        ->join("tvl_kotas as d", "tt_tk_kode_tujuan", "=", "d.tk_kode")
+        ->where('tt_kode', $id)
+        ->get();
 
         if(count($resp->all()) > 0){
             return view('transportasi.detail', ['response'=>$resp, 'title'=>'Detail Transportasi']);
