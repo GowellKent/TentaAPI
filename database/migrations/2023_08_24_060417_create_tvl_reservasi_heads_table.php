@@ -23,10 +23,10 @@ class CreateTvlReservasiHeadsTable extends Migration
             $table->integer('trh_durasi');
             $table->integer('trh_pax');
             $table->integer('trh_harga');
-            $table->string('trh_provinsi_asal');
-            $table->string('trh_kota_asal');
-            $table->string('trh_provinsi_tujuan');
-            $table->string('trh_kota_tujuan');
+            $table->bigInteger('trh_tp_kode_asal')->unsigned()->nullable();
+            $table->bigInteger('trh_tk_kode_asal')->unsigned()->nullable();
+            $table->bigInteger('trh_tp_kode_tujuan')->unsigned()->nullable();
+            $table->bigInteger('trh_tk_kode_tujuan')->unsigned()->nullable();
             $table->bigInteger('trh_tt_kode')->unsigned()->nullable();
             $table->timestamps();
 
@@ -34,6 +34,11 @@ class CreateTvlReservasiHeadsTable extends Migration
             $table->foreign('trh_tsr_kode')->references('tsr_kode')->on('tvl_status_reservasis')->onDelete('SET NULL');
             $table->foreign('trh_tu_kode')->references('id')->on('users')->onDelete('SET NULL');
             $table->foreign('trh_tt_kode')->references('tt_kode')->on('tvl_transports')->onDelete('SET NULL');
+            
+            $table->foreign('trh_tp_kode_asal')->references('tp_kode')->on('tvl_provinsis')->onDelete("SET NULL");
+            $table->foreign('trh_tk_kode_asal')->references('tk_kode')->on('tvl_kotas')->onDelete("SET NULL");
+            $table->foreign('trh_tp_kode_tujuan')->references('tp_kode')->on('tvl_provinsis')->onDelete("SET NULL");
+            $table->foreign('trh_tk_kode_tujuan')->references('tk_kode')->on('tvl_kotas')->onDelete("SET NULL");
         });
     }
 
@@ -53,12 +58,20 @@ class CreateTvlReservasiHeadsTable extends Migration
            $table->dropForeign(['trh_tsr_kode']);
            $table->dropForeign(['trh_tu_kode']);
            $table->dropForeign(['trh_tt_kode']);
+           $table->dropForeign(['trh_tp_kode_asal']);
+           $table->dropForeign(['trh_tk_kode_asal']);
+           $table->dropForeign(['trh_tp_kode_tujuan']);
+           $table->dropForeign(['trh_tk_kode_tujuan']);
 
            // 2. Drop the column
            $table->dropColumn('trh_tph_kode');
            $table->dropColumn('trh_tsr_kode');
            $table->dropColumn('trh_tu_kode');
            $table->dropColumn('trh_tt_kode');
+           $table->dropColumn('trh_tp_kode_asal');
+           $table->dropColumn('trh_tk_kode_asal');
+           $table->dropColumn('trh_tp_kode_tujuan');
+           $table->dropColumn('trh_tk_kode_tujuan');
         });
     }
 }

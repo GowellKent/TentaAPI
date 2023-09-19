@@ -4,6 +4,7 @@ use App\Http\Controllers\FotoTransportController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ObjekController;
 use App\Http\Controllers\PaketController;
+use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\TransportController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,7 +39,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
     Route::get('/dashboard',[LoginController::class, 'dashboard']);
 
 
-    //group function transportasi ========================================================================================================
+    //group function TRANSPORTASI ========================================================================================================
     Route::group(['prefix' => 'transportasi'], function(){
         Route::get('/index',[TransportController::class, 'index']);
         Route::get('/detail',[TransportController::class, 'detail']);
@@ -50,7 +51,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
         Route::post('/create', [TransportController::class, 'create'])->middleware('auth');
     });
     
-    //group function customer ========================================================================================================
+    //group function CUSTOMER ========================================================================================================
     Route::group(['prefix' => 'customer'], function(){
         Route::get('/index', [LoginController::class, 'customer']);
     });
@@ -67,7 +68,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
         Route::post('/update', [PaketController::class, 'paketUpdate']);
     });
 
-    //group function objek  ========================================================================================================        
+    //group function OBJEK  ========================================================================================================        
     Route::group(['prefix' => 'objek'], function(){
         Route::get('/index', [ObjekController::class, 'index']);
         Route::get('/detail', [ObjekController::class, 'detail']);
@@ -78,6 +79,11 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
         Route::post('/update', [ObjekController::class, 'objekUpdate']);
         Route::get('/delete', [ObjekController::class, 'objekDelete']);
     });
+
+    //group function RESERVASI  ========================================================================================================  
+    Route::group(['prefix' => 'reservasi'], function(){
+        Route::get('/index', [ReservasiController::class, 'index']);
+    });     
 });
 
 // Route::get('/testchart', [LoginController::class, 'chartJs']);

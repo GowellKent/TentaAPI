@@ -6,9 +6,11 @@ use App\Models\tvl_reservasi_det;
 use App\Models\tvl_reservasi_head;
 use App\Models\tvl_status_reservasi;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ReservasiController extends Controller
 {
@@ -321,5 +323,241 @@ class ReservasiController extends Controller
                 'message' => 'Reservasi Not Found',
             ], 404);
         }
+    }
+
+    function customRes(Request $request)
+    {
+
+        //get max value of primary key for sequencing
+        $trh_kode = DB::table("tvl_reservasi_heads")->max('trh_kode') + 1;
+
+        $insertHead = array();
+
+        foreach (array_keys((array)$request->input()) as $value) {
+
+            $insertHead['trh_kode'] = $trh_kode;
+            $insertHead['trh_durasi'] = $request->input('trh_durasi');
+            $insertHead['trh_provinsi_asal'] = $request->input('trh_provinsi_asal');
+            $insertHead['trh_kota_asal'] = $request->input('trh_kota_asal');
+            $insertHead['trh_provinsi_tujuan'] = $request->input('trh_provinsi_tujuan');
+            $insertHead['trh_kota_tujuan'] = $request->input('trh_kota_tujuan');
+            $insertHead['trh_tb_kode_brk'] = $request->input('trh_tb_kode_brk');
+            $insertHead['trh_tb_kode_pul'] = $request->input('trh_tb_kode_pul');
+            $insertHead['trh_tu_kode'] = $request->input('trh_tu_kode');
+            $insertHead['trh_tph_kode'] = 17;
+            $insertHead['trh_pax'] = $request->input('trh_pax');
+            $insertHead['trh_tgl_jalan'] = DateTime::createFromFormat('Y-m-d', $request->input('trh_tgl_jalan'));
+            $insertHead['trh_tgl_reservasi'] = Carbon::now()->format('Y-m-d');
+            $insertHead['trh_tsr_kode'] = 2;
+        }
+
+        foreach (array_keys((array)$request->input('trd_tot_kode')) as $kode) {
+            // var_dump($request->input('trd_tot_kode')[$kode][1]);
+        }
+        //     // var_dump($kode);
+
+        //     $objek = tvl_objek_tujuan::where('tot_kode', $kode)->first();
+        // }
+        // if ($objek) {
+
+        $hargaBusBrk = DB::table("tvl_buses")->select("tb_harga")->where("tb_kode", $request->input('trh_tb_kode_brk'))->get();
+        $hargaBusPul = DB::table("tvl_buses")->select("tb_harga")->where("tb_kode", $request->input('trh_tb_kode_pul'))->get();
+        if ($hargaBusBrk && $hargaBusPul) {
+            $insertHead["trh_harga"] = (int)($hargaBusBrk[0]->tb_harga + $hargaBusPul[0]->tb_harga);
+        }
+
+        $reservasi = tvl_reservasi_head::create($insertHead);
+
+        if ($reservasi) {
+
+            $trd_kode = DB::table("tvl_reservasi_dets")->max('trd_kode') + 1;
+            $dataDetail = array();
+            $i = 0;
+            var_dump($request->input('trd_tot_kode'));
+            foreach (array_keys($request->input('trd_tot_kode')) as $kode) {
+
+                var_dump($kode);
+                $dataDetail['trd_tot_kode'] = $kode;
+                $dataDetail['trd_hari'] = $request->input('trd_tot_kode')[$kode][0];
+                $dataDetail['trd_jam'] = $request->input('trd_tot_kode')[$kode][1];
+                $dataDetail['trd_kode'] = $trd_kode + $i;
+                $dataDetail['trd_trh_kode'] = $trh_kode;
+
+                $resDet = tvl_reservasi_det::create($dataDetail);
+                var_dump($resDet);
+                if ($resDet) {
+                    $hargaAwal = DB::table("tvl_reservasi_heads")->select("trh_harga")->where("trh_kode", $trh_kode)->get();
+                    $hargaObjek = DB::table("tvl_objek_tujuans")->select("tot_harga")->where("tot_kode", $kode)->get();
+
+                    $hargaUpdate = (int)$hargaAwal[0]->trh_harga + $hargaObjek[0]->tot_harga;
+
+                    $hargaBaru =    DB::table("tvl_reservasi_heads")
+                        ->where('trh_kode', $trh_kode)
+                        ->limit(1)
+                        ->update(array("trh_harga" => $hargaUpdate));
+                }
+
+                $i++;
+            }
+            $newDataRes = DB::table("tvl_reservasi_heads")->where("trh_kode", $trh_kode)->get();
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Reservasi Created',
+                'data' => $newDataRes
+            ], 201);
+        }
+        // if ($reservasi && $resDet) {
+
+        // }
+        // }
+
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Reservasi Gagal'
+        ], 409);
+    }
+
+    function addDataDet(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'trd_trh_kode' => 'required',
+            'trd_tot_kode' => 'required',
+            'trd_hari' => 'required',
+            'trd_jam' => 'required'
+        ]);
+
+        //response error validation
+        if ($validate->fails()) {
+            return response()->json($validate->errors(), 400);
+        }
+
+        // $data = array_keys((array)$request->input());
+        $resp = DB::table("tvl_reservasi_dets")->max('trd_kode') + 1;
+
+        $data = array();
+        foreach (array_keys((array)$request->input()) as $value) {
+            $data[$value] = $request->input($value);
+            // $data['trd_kode'] = 0;   
+        }
+
+        //save to DB
+        $paketDet = tvl_reservasi_det::create($data);
+
+        if ($paketDet) {
+            $trh_kode = $request->input('trd_trh_kode');
+            $hargaAwal = DB::table("tvl_reservasi_heads")->select("trh_harga")->where("trh_kode", $trh_kode)->get();
+            $hargaObjek = DB::table("tvl_objek_tujuans")->select("tot_harga")->where("tot_kode",  $request->input("trd_tot_kode"))->get();
+
+            $hargaUpd = (int)$hargaAwal[0]->trh_harga + $hargaObjek[0]->tot_harga;
+
+            $paket =    DB::table("tvl_reservasi_heads")
+                ->where('trh_kode', $trh_kode)
+                ->limit(1)
+                ->update(array("trh_harga" => $hargaUpd));
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Reservasi Created',
+                'data'    => $request->input()
+            ], 201);
+        }
+
+        //failed save to database
+        return response()->json([
+            'success' => false,
+            'message' => 'Reservasi Failed to Save',
+        ], 409);
+    }
+
+    function addMultiDataDet(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'trd_trh_kode' => 'required',
+            'trd_tot_kode' => 'required'
+        ]);
+
+        //response error validation
+        if ($validate->fails()) {
+            return response()->json($validate->errors(), 400);
+        }
+
+        // $data = array_keys((array)$request->input());
+        $resp = DB::table("tvl_reservasi_dets")->max('trd_kode') + 1;
+
+        $data = array();
+        $tot_kode = explode(';', $request->input("trd_tot_kode"));
+        // var_dump($tot_kode);
+        foreach ($tot_kode as $value) {
+            $record = Str::remove(['[', ']'], $value);
+            $items = explode(',', $record);
+            
+            var_dump($items);
+
+            $temp = Str::swap(["\""=>""], $items[2]);
+            $dateStr = (string)'01/01/1999 '.$temp;
+
+            $timeString = Carbon::createFromFormat('d/m/Y H:i:s', $dateStr)->format('H:i:s');
+
+            var_dump($timeString);
+            
+            $data['trd_trh_kode'] = $request->input('trd_trh_kode');
+            $data['trd_kode'] = $resp;
+            $data['trd_tot_kode'] = $items[0];
+            $data['trd_hari'] = $items[1];
+            $data['trd_jam'] = (int)$timeString;
+
+            $paketDet = tvl_reservasi_det::create($data);
+            $resp += 1;
+
+            if ($paketDet) {
+                $trh_kode = $request->input('trd_trh_kode');
+                $hargaAwal = DB::table("tvl_reservasi_heads")->select("trh_harga")->where("trh_kode", $trh_kode)->get();
+                $hargaObjek = DB::table("tvl_objek_tujuans")->select("tot_harga")->where("tot_kode",  $value)->get();
+
+                $hargaUpd = (int)$hargaAwal[0]->trh_harga + $hargaObjek[0]->tot_harga;
+
+                $paket =    DB::table("tvl_reservasi_heads")
+                    ->where('trh_kode', $trh_kode)
+                    ->limit(1)
+                    ->update(array("trh_harga" => $hargaUpd));
+            }
+        }
+
+
+        //save to DB
+
+        if ($paketDet) {
+
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Detail Reservasi Added',
+            ], 201);
+        }
+
+        //failed save to database
+        return response()->json([
+            'success' => false,
+            'message' => 'Reservasi Failed to Save',
+        ], 409);
+    }
+
+
+    //===================================================================================================================================
+    // VIEW FUNCTIONS
+    //===================================================================================================================================
+
+    function index(){
+        $response = DB::table("tvl_reservasi_heads")
+        ->select("trh_kode", "tph_nama",  "name", "trh_tgl_reservasi", "trh_tgl_jalan", "trh_pax", "tsr_desc")
+        ->join("tvl_paket_heads", "trh_tph_kode", "=", "tph_kode")
+        ->join("users", "trh_tu_kode", "=", "id")
+        ->join("tvl_status_reservasis", "trh_tsr_kode", "=", "tsr_kode")
+        ->get();
+
+    return view('reservasi.index', ['response' => $response, 'title' => 'Reservasi']);
+
     }
 }
