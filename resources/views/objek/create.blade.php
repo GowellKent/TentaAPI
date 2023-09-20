@@ -43,8 +43,8 @@
                 <div class="row my-3">
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-control" id="floatingtot_provinsi" name="tot_provinsi">
-                                <option value={{ old('tot_provinsi') }}>--Provinsi--</option>
+                            <select class="form-control" id="floatingtot_provinsi" name="tot_tp_kode">
+                                <option value={{ old('tot_tp_kode') }}>--Provinsi--</option>
                             </select>
                             <label for="floatingtot_provinsi">
                                 <h6>Provinsi</h6>
@@ -53,8 +53,8 @@
                     </div>
                     <div class="col">
                         <div class="form-floating">
-                            <select name="tot_kota" class="form-control" id="floatingtot_kota">
-                                <option value="{{ old('tot_kota') }}">--Kota--</option>
+                            <select name="tot_tk_kode" class="form-control" id="floatingtot_kota">
+                                <option value="{{ old('tot_tk_kode') }}">--Kota--</option>
                             </select>
                             <label for="floatingtot_kota">
                                 <h6>Kota</h6>
@@ -85,47 +85,38 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        fetch("https://dev.farizdotid.com/api/daerahindonesia/provinsi")
+        fetch("/api/daerah/provinsi")
             .then((response) => {
                 return response.json();
             })
             .then((data) => {
-                let listProvinsi = data.provinsi
-                $('#floatingtot_provinsi').append(listProvinsi.map(function(provs) {
+                $('#floatingtot_provinsi').append(data.map(function(provs) {
                         return $('<option>', {
-                            text: provs.nama,
-                            value: provs.nama
+                            text: provs.tp_nama,
+                            value: provs.tp_kode
                         })
                     }))
                     .change(function() {
-                        let chosenId = ""
-                        for(let i = 0; i < listProvinsi.length; i++){
-                            if(listProvinsi[i].nama == this.value){
-                                chosenId = listProvinsi[i].id
-                            }
-                        }
-                        fetch('https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=' + chosenId, {
+                        fetch('/api/daerah/kota?id_provinsi=' + this
+                                .value, {
                                     method: "GET"
                                 })
                             .then((response) => {
                                 return response.json();
                             })
                             .then((data) => {
-                                // console.log(data.kota_kabupaten)
-                                let listKotaAsal = data.kota_kabupaten;
-                                $('#floatingtot_kota').empty()
-                                $('#floatingtot_kota').append(listKotaAsal.map(function(kota) {
-                                        return $('<option>', {
-                                            text: kota.nama,
-                                            value: kota.nama
-                                        })
-                                    }))
-                                    .change(function() {
-                                        // console.log("kota asal", this.value)
+                                $('#floatingtot_kota').empty();
+                                $('#floatingtot_kota').append(data.map(function(kota) {
+                                    return $('<option>', {
+                                        text: kota.tk_nama,
+                                        value: kota.tk_kode
                                     })
+                                }))
                             })
                     })
             });
+
+
         fetch('/api/objek/jenis')
             .then((response) => {
                 return response.json()

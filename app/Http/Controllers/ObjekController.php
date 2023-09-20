@@ -223,8 +223,8 @@ class ObjekController extends Controller
         $validate = Validator::make($request->all(), [
             'tot_tjo_kode' => 'required',
             'tot_nama' => 'required',
-            'tot_provinsi' => 'required',
-            'tot_kota' => 'required',
+            'tot_tp_kode' => 'required',
+            'tot_tk_kode' => 'required',
             'tot_harga' => 'required',
         ]);
 
@@ -248,7 +248,7 @@ class ObjekController extends Controller
 
         if ($objekTujuan) {
 
-            return redirect()->intended('/objek');
+            return redirect()->intended('/admin/objek/index');
         }
 
         //failed save to database
@@ -269,8 +269,10 @@ class ObjekController extends Controller
         $id = $request->input('tot_kode');
 
         $resp = DB::table('tvl_objek_tujuans')
-            ->select("*", "tjo_desc")
+            ->select("*", "tjo_desc", "tp_nama", "tk_nama")
             ->join("tvl_jenis_objeks", "tot_tjo_kode", "=", "tjo_kode")
+            ->join("tvl_provinsis", "tot_tp_kode", "=", "tp_kode")
+            ->join("tvl_kotas", "tot_tk_kode", "=", "tk_kode")
             ->where('tot_kode', $id)
             ->get();
 
@@ -311,7 +313,7 @@ class ObjekController extends Controller
                 ->limit(1)
                 ->update($data);
 
-                return redirect()->intended('/objek');
+                return redirect()->intended('/admin/objek/index');
         }
 
         //failed save to database
