@@ -60,12 +60,16 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
     Route::group(['prefix' => 'paket'], function(){
         Route::get('/index', [PaketController::class, 'index']);
         Route::get('/detail', [PaketController::class, 'paketDetail']);
+        Route::get('/list', [PaketController::class, 'listDetail']);
         Route::get('/create',  function(){
             return view('paket.create', ['title'=>'Create Paket Wisata']);
         });
         Route::post('/create', [PaketController::class, 'paketCreate']);
         Route::get('/delete', [PaketController::class, 'paketDelete']);
         Route::post('/update', [PaketController::class, 'paketUpdate']);
+        // Route::get('/list', function(){
+        //     return view('paket.list', ['title' => 'List Objek Paket Wisata']);
+        // });
     });
 
     //group function OBJEK  ========================================================================================================        

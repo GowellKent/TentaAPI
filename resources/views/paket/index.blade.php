@@ -23,14 +23,13 @@
             <tbody id="indexTable">
                 @foreach ($response as $key => $response)
                     <tr class="align-middle">
-                        <td>{{ $response->tph_kode }}
-                        </td>
+                        <td>{{ $response->tph_kode }}</td>
                         <td>{{ $response->tjt_desc }}</td>
                         <td><a href="{{ '/admin/paket/detail?tph_kode=' . $response->tph_kode }}">{{ $response->tph_nama }}</a></td>
                         <td>{{ $response->tph_durasi }} Hari</td>
                         <td class="text-nowrap">Rp {{ $response->tph_harga }}</td>
-                        <td>{{ $response->tph_provinsi_asal }}, {{ $response->tph_kota_asal }}</td>
-                        <td>{{ $response->tph_provinsi_tujuan }}, {{ $response->tph_kota_tujuan }}</td>
+                        <td>{{ $response->prov_asal }}, {{ $response->kota_asal }}</td>
+                        <td>{{ $response->prov_tujuan }}, {{ $response->kota_tujuan }}</td>
                         <td class="text-center"><button class="btn btn-lg-2 px-sm-3 btn-danger align-center"
                                 onclick="delBus('{{ $response->tph_kode }}')" id="btnDel"><i
                                     class="bi bi-trash-fill"></i></button>

@@ -10,7 +10,7 @@ class tvl_paket_head extends Model
 {
     use HasFactory;
     protected $primaryKey = 'tph_kode';
-    protected $fillable = ['tph_kode', 'tph_nama', 'tph_tjt_kode', 'tph_durasi', 'tph_provinsi_asal', 'tph_kota_asal', 'tph_provinsi_tujuan','tph_kota_tujuan',
+    protected $fillable = ['tph_kode', 'tph_nama', 'tph_tjt_kode', 'tph_durasi', 'tph_tp_kode_asal', 'tph_tk_kode_asal', 'tph_tp_kode_tujuan','tph_tk_kode_tujuan',
                             'tph_harga'];
 
     public function details(): HasMany

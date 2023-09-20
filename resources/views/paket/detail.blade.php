@@ -1,10 +1,10 @@
 @extends('layout/form')
 @section('container')
     <div class="row">
-        <div class="col align-self-center">
+        {{-- <div class="col align-self-center">
             <a href="#carouselExampleControls" data-slide="prev" class="btn btn-lg"><i class="bi bi-chevron-left text-success"
                     style="font-size: 2.5rem"></i></a>
-        </div>
+        </div> --}}
         <div class="col-10" style="height: 40rem">
             <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="false">
                 <div class="carousel-inner">
@@ -22,7 +22,7 @@
                                     </div>
                                     <div class="form-floating">
                                         <select class="form-control" id="floatingtph_tjt_kode" name="tph_tjt_kode">
-                                            <option value="{{ $response[0]->tph_tjt_kode }}">--Jenis Paket--</option>
+                                            <option value="{{ $response[0]->tph_tjt_kode }}">{{$response[0]->tjt_desc}}</option>
                                         </select>
                                         <label for="floatingtph_tjt_kode">
                                             <h6>Jenis Paket</h6>
@@ -38,10 +38,10 @@
                                     <div class="row my-3">
                                         <div class="col">
                                             <div class="form-floating">
-                                                <select class="form-control" id="floatingtph_provinsi_asal"
-                                                    name="tph_provinsi_asal">
-                                                    <option value="{{ $response[0]->tph_provinsi_asal }}">
-                                                        {{ $response[0]->tph_provinsi_asal }}
+                                                <select class="form-control" id="floatingtph_tp_kode_asal"
+                                                    name="tph_tp_kode_asal">
+                                                    <option value="{{ $response[0]->tph_tp_kode_asal }}">
+                                                        {{ $response[0]->prov_asal }}
                                                     </option>
                                                 </select>
                                                 <label for="floatingtph_provinsi_asal">
@@ -51,10 +51,10 @@
                                         </div>
                                         <div class="col">
                                             <div class="form-floating">
-                                                <select name="tph_kota_asal" class="form-control"
-                                                    id="floatingtph_kota_asal">
-                                                    <option value="{{ $response[0]->tph_kota_asal }}">
-                                                        {{ $response[0]->tph_kota_asal }}</option>
+                                                <select name="tph_tk_kode_asal" class="form-control"
+                                                    id="floatingtph_tk_kode_asal">
+                                                    <option value="{{ $response[0]->tph_tk_kode_asal }}">
+                                                        {{ $response[0]->kota_asal }}</option>
                                                 </select>
                                                 <label for="floatingtph_kota_asal">
                                                     <h6>Kota Asal</h6>
@@ -65,10 +65,10 @@
                                     <div class="row my-3">
                                         <div class="col">
                                             <div class="form-floating">
-                                                <select class="form-control" id="floatingtph_provinsi_tujuan"
-                                                    name="tph_provinsi_tujuan">
-                                                    <option value="{{ $response[0]->tph_provinsi_tujuan }}">
-                                                        {{ $response[0]->tph_provinsi_tujuan }}
+                                                <select class="form-control" id="floatingtph_tp_kode_tujuan"
+                                                    name="tph_tp_kode_tujuan">
+                                                    <option value="{{ $response[0]->tph_tp_kode_tujuan }}">
+                                                        {{ $response[0]->prov_tujuan }}
                                                     </option>
                                                 </select>
                                                 <label for="floatingtph_provinsi_tujuan">
@@ -78,10 +78,10 @@
                                         </div>
                                         <div class="col">
                                             <div class="form-floating">
-                                                <select name="tph_kota_tujuan" class="form-control"
-                                                    id="floatingtph_kota_tujuan">
-                                                    <option value="{{ $response[0]->tph_kota_tujuan }}">
-                                                        {{ $response[0]->tph_kota_tujuan }}</option>
+                                                <select name="tph_tk_kode_tujuan" class="form-control"
+                                                    id="floatingtph_tk_kode_tujuan">
+                                                    <option value="{{ $response[0]->tph_tk_kode_tujuan }}">
+                                                        {{ $response[0]->kota_tujuan }}</option>
                                                 </select>
                                                 <label for="floatingtph_kota_tujuan">
                                                     <h6>Kota Tujuan</h6>
@@ -108,12 +108,14 @@
                                             </label>
                                         </div>
                                     </div>
+                                    <a class="btn mt-3 btn-outline-success float-start" href="/admin/paket/list?tph_kode={{$response[0]->tph_kode}}"><i class="bi bi-chevron-right"></i>
+                                        List Tujuan</a>
                                     <button class="btn btn-primary mt-3 float-end" type="submit">Update Data</button>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    <div class="carousel-item">
+                    {{-- <div class="carousel-item">
                         <div class="card mx-auto mt-5">
                             <div class="card-header float-end">
                                 <div class="row">
@@ -183,17 +185,17 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
-        <div class="col align-self-center">
-            <a href="#carouselExampleControls" data-slide="next" class="btn btn-lg"><i
+        {{-- <div class="col align-self-center">
+            <a href="/admin/paket/list?tph_kode={{$response[0]->tph_kode}}" class="btn btn-lg"><i
                     class="bi bi-chevron-right text-success" style="font-size: 2.5rem"></i></a>
-        </div>
+        </div> --}}
     </div>
     <!-- Modal -->
-    <div id="myModal" class="modal fade" role="dialog">
+    {{-- <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -222,9 +224,9 @@
                             <label for="floatingtrd_tot_kode">
                                 <h6>Jenis Objek</h6>
                             </label>
-                        </div>
+                        </div> --}}
 
-                        <div class="form-floating my-3">
+                        {{-- <div class="form-floating my-3">
                             <select class="form-control" id="floatingtpd_tot_kode" name="tpd_tot_kode" required
                                 onclick="getObjek('{{ $response[0]->tph_provinsi_tujuan }}', '{{ $response[0]->tph_kota_tujuan }}' )">
                                 <option value="">--Objek Wisata--
@@ -233,9 +235,9 @@
                             <label for="floatingtpd_tot_kode">
                                 <h6>Objek Wisata</h6>
                             </label>
-                        </div>
+                        </div> --}}
 
-                        <div class="form-floating my-3">
+                        {{-- <div class="form-floating my-3">
                             <select class="form-control" id="floatingtpd_hari" name="tpd_hari" required>
                                 <option value="">--Hari--</option>
                                 @for ($i = 1; $i <= $response[0]->tph_durasi; $i++)
@@ -262,7 +264,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     </div>
 @endsection
 
@@ -270,79 +272,60 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        fetch("https://dev.farizdotid.com/api/daerahindonesia/provinsi")
+        fetch("/api/daerah/provinsi")
             .then((response) => {
                 return response.json();
             })
             .then((data) => {
-                let listProvinsi = data.provinsi
-                $('#floatingtph_provinsi_asal').append(listProvinsi.map(function(provs) {
+                $('#floatingtph_tp_kode_asal').append(data.map(function(provs) {
                         return $('<option>', {
-                            text: provs.nama,
-                            value: provs.nama
+                            text: provs.tp_nama,
+                            value: provs.tp_kode
                         })
                     }))
                     .change(function() {
-                        let chosenId = ""
-                        for (let i = 0; i < listProvinsi.length; i++) {
-                            if (listProvinsi[i].nama == this.value) {
-                                chosenId = listProvinsi[i].id
-                            }
-                        }
-                        fetch('https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=' +
-                                chosenId, {
+                        fetch('/api/daerah/kota?id_provinsi=' + this
+                                .value, {
                                     method: "GET"
                                 })
                             .then((response) => {
                                 return response.json();
                             })
                             .then((data) => {
-                                let listKotaAsal = data.kota_kabupaten
-                                $('#floatingtph_kota_asal').empty();
-                                $('#floatingtph_kota_asal').append(listKotaAsal.map(
-                                    function(kota) {
+                                $('#floatingtph_tk_kode_asal').empty();
+                                $('#floatingtph_tk_kode_asal').append(data.map(function(kota) {
                                         return $('<option>', {
-                                            text: kota.nama,
-                                            value: kota.nama
+                                            text: kota.tk_nama,
+                                            value: kota.tk_kode
                                         })
                                     }))
                             })
                     })
-                $('#floatingtph_provinsi_tujuan').append(listProvinsi.map(function(provs) {
+                $('#floatingtph_tp_kode_tujuan').append(data.map(function(provs) {
                         return $('<option>', {
-                            text: provs.nama,
-                            value: provs.nama
+                            text: provs.tp_nama,
+                            value: provs.tp_kode
                         })
                     }))
                     .change(function() {
-                        let chosenId = ""
-                        for (let i = 0; i < listProvinsi.length; i++) {
-                            if (listProvinsi[i].nama == this.value) {
-                                chosenId = listProvinsi[i].id
-                            }
-                        }
-                        fetch('https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=' +
-                                chosenId, {
-                                    method: "GET"
-                                })
+                        fetch('/api/daerah/kota?id_provinsi=' + this
+                                .value)
                             .then((response) => {
                                 return response.json();
                             })
                             .then((data) => {
-                                let listKotaTujuan = data.kota_kabupaten
-                                $('#floatingtph_kota_tujuan').empty();
-                                $('#floatingtph_kota_tujuan').append(listKotaTujuan.map(
-                                    function(
-                                        kota) {
+                                $('#floatingtph_tk_kode_tujuan').empty();
+                                $('#floatingtph_tk_kode_tujuan').append(data.map(function(kota) {
                                         return $('<option>', {
-                                            text: kota.nama,
-                                            value: kota.nama
+                                            text: kota.tk_nama,
+                                            value: kota.tk_kode
                                         })
                                     }))
                             })
                     })
             });
-        fetch('/api/paket/trip')
+            
+        fetch('/api/paket/head/jenis')
             .then((response) => {
                 return response.json()
             })
@@ -357,7 +340,7 @@
             })
     });
 </script>
-<script>
+{{-- <script>
     function getObjek(tot_provinsi, tot_kota) {
         let tot_tjo_kode = $("#floatingtrd_tot_tjo_kode").val()
         // console.log(tot_provinsi, tot_kota)
@@ -394,17 +377,17 @@
     function updateDet(tpd_kode) {
         let stringConfirm = "Data Detail Paket " + tpd_kode + " akan dirubah"
         if (confirm(stringConfirm)) {
-        fetch("/updatePaketDet?" + new URLSearchParams({
-                "tpd_kode": tpd_kode,
-                "tpd_hari": $("#floatingtpd_hari" + tpd_kode).val(),
-                "tpd_jam": $("#tpd_jam" + tpd_kode).val()
-            }))
-            .then(() => {
-                window.location.reload();
-            }).catch((err) => function() {
-                console.log(err)
+            fetch("/updatePaketDet?" + new URLSearchParams({
+                    "tpd_kode": tpd_kode,
+                    "tpd_hari": $("#floatingtpd_hari" + tpd_kode).val(),
+                    "tpd_jam": $("#tpd_jam" + tpd_kode).val()
+                }))
+                .then(() => {
+                    window.location.reload();
+                }).catch((err) => function() {
+                    console.log(err)
 
-            })
+                })
         }
     }
-</script>
+</script> --}}

@@ -96,10 +96,10 @@ class PaketController extends Controller
             'tph_tjt_kode' => 'required',
             'tph_nama' => 'required',
             'tph_durasi' => 'required',
-            'tph_provinsi_asal' => 'required',
-            'tph_kota_asal' => 'required',
-            'tph_provinsi_tujuan' => 'required',
-            'tph_kota_tujuan' => 'required'
+            'tph_tp_kode_asal' => 'required',
+            'tph_tk_kode_asal' => 'required',
+            'tph_tp_kode_tujuan' => 'required',
+            'tph_tk_kode_tujuan' => 'required'
         ]);
 
         //response error validation
@@ -413,8 +413,13 @@ class PaketController extends Controller
     {
 
         $resp = DB::table("tvl_paket_heads")
-            ->select("tph_kode", "tjt_desc", "tph_nama", "tph_durasi", "tph_harga", "tph_provinsi_asal", "tph_provinsi_tujuan", "tph_kota_tujuan", "tph_kota_asal")
+            ->select("tph_kode", "tjt_desc", "tph_nama", "tph_durasi", "tph_harga", "tph_tp_kode_asal", "tph_tp_kode_tujuan", "tph_tk_kode_tujuan", "tph_tk_kode_asal",
+            "a.tp_nama as prov_asal", "b.tk_nama as kota_asal", "c.tp_nama as prov_tujuan", "d.tk_nama as kota_tujuan")
             ->join("tvl_jenis_trips", "tph_tjt_kode", "=", "tjt_kode")
+            ->join("tvl_provinsis as a", "tph_tp_kode_asal", "=", "a.tp_kode")
+            ->join("tvl_kotas as b", "tph_tk_kode_asal", "=", "b.tk_kode")
+            ->join("tvl_provinsis as c", "tph_tp_kode_tujuan", "=", "c.tp_kode")
+            ->join("tvl_kotas as d", "tph_tk_kode_tujuan", "=", "d.tk_kode")
             ->orderBy("tph_kode")
             ->get();
 
@@ -428,12 +433,10 @@ class PaketController extends Controller
             'tph_tjt_kode' => 'required',
             'tph_nama' => 'required',
             'tph_durasi' => 'required',
-            'tph_provinsi_asal' => 'required',
-            'tph_kota_asal' => 'required',
-            'tph_provinsi_tujuan' => 'required',
-            'tph_kota_tujuan' => 'required',
-            'tph_min_pax' => 'required',
-            'tph_max_pax' => 'required'
+            'tph_tp_kode_asal' => 'required',
+            'tph_tk_kode_asal' => 'required',
+            'tph_tp_kode_tujuan' => 'required',
+            'tph_tk_kode_tujuan' => 'required'
         ]);
 
         //response error validation
@@ -456,7 +459,7 @@ class PaketController extends Controller
         $paketHead = tvl_paket_head::create($data);
 
         if ($paketHead) {
-            $redirectURL = (string)'/paketDetail?tph_kode='.$resp;
+            $redirectURL = (string)'/admin/paket/detail?tph_kode='.$resp;
             return redirect($redirectURL);
         }
 
@@ -514,13 +517,46 @@ class PaketController extends Controller
         $tph_kode = $request->input("tph_kode");
 
         $resp = DB::table("tvl_paket_heads")
-            ->select("*", "tjt_desc")
+            ->select("*", "tjt_desc", "a.tp_nama as prov_asal", "b.tk_nama as kota_asal", "c.tp_nama as prov_tujuan", "d.tk_nama as kota_tujuan")
             ->join("tvl_jenis_trips", "tph_tjt_kode", "=", "tjt_kode")
+            ->join("tvl_provinsis as a", "tph_tp_kode_asal", "=", "a.tp_kode")
+            ->join("tvl_kotas as b", "tph_tk_kode_asal", "=", "b.tk_kode")
+            ->join("tvl_provinsis as c", "tph_tp_kode_tujuan", "=", "c.tp_kode")
+            ->join("tvl_kotas as d", "tph_tk_kode_tujuan", "=", "d.tk_kode")
             ->where("tph_kode", $tph_kode)
             ->get();
 
+        // $respDetail = DB::table('tvl_paket_dets')
+        //     ->select("tpd_kode", "tot_kode", "tot_nama", "tot_alamat", "tot_tk_kode", "tk_nama", "tot_tp_kode", "tp_nama", "tot_tjo_kode", "tjo_desc", "tot_harga", "tpd_hari", "tpd_jam")
+        //     ->join('tvl_objek_tujuans', 'tpd_tot_kode', '=', 'tot_kode')
+        //     ->join('tvl_jenis_objeks', 'tot_tjo_kode', '=', 'tjo_kode')
+        //     ->join('tvl_kotas', 'tot_tk_kode', '=', 'tk_kode')
+        //     ->join('tvl_provinsis', 'tot_tp_kode', '=', 'tp_kode')
+        //     ->where('tpd_tph_kode',  $tph_kode)
+        //     ->get();
+
+        if (count($resp->all()) > 0) {
+            return view('paket.detail', ['response' => $resp, 'title' => 'Detail Paket Wisata']);
+        }
+        else {
+            return back();
+        }
+    }
+
+    function listDetail(Request $request){
+        $validate = Validator::make($request->all(), [
+            'tph_kode' => 'required',
+        ]);
+
+        //response error validation
+        if ($validate->fails()) {
+            return back();
+        }
+
+        $tph_kode = $request->input("tph_kode");
+
         $respDetail = DB::table('tvl_paket_dets')
-            ->select("tpd_kode", "tot_kode", "tot_nama", "tot_alamat", "tot_tk_kode", "tk_nama", "tot_tp_kode", "tp_nama", "tot_tjo_kode", "tjo_desc", "tot_harga", "tpd_hari", "tpd_jam")
+            ->select("tpd_tph_kode", "tpd_kode", "tot_kode", "tot_nama", "tot_alamat", "tot_tk_kode", "tk_nama", "tot_tp_kode", "tp_nama", "tot_tjo_kode", "tjo_desc", "tot_harga", "tpd_hari", "tpd_jam")
             ->join('tvl_objek_tujuans', 'tpd_tot_kode', '=', 'tot_kode')
             ->join('tvl_jenis_objeks', 'tot_tjo_kode', '=', 'tjo_kode')
             ->join('tvl_kotas', 'tot_tk_kode', '=', 'tk_kode')
@@ -528,12 +564,12 @@ class PaketController extends Controller
             ->where('tpd_tph_kode',  $tph_kode)
             ->get();
 
-        if (count($resp->all()) > 0) {
-            return view('paket.detail', ['response' => $resp, 'title' => 'Detail Paket Wisata', 'responseDet'=>$respDetail]);
-        }
-        else {
-            return back();
-        }
+            // if (count($respDetail->all()) > 0) {
+                return view('paket.list', ['responseDet' => $respDetail, 'title' => 'List Objek Paket Wisata']);
+            // }
+            // else {
+            //     return back();
+            // }
     }
 
     function paketUpdate(Request $request, tvl_paket_head $paket)
@@ -567,7 +603,7 @@ class PaketController extends Controller
                 ->limit(1)
                 ->update($data);
 
-            return redirect()->intended('/paket');
+            return redirect()->intended('/admin/paket/index');
         }
 
         //failed save to database
