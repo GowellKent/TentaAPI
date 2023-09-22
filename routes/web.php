@@ -61,6 +61,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
         Route::get('/index', [PaketController::class, 'index']);
         Route::get('/detail', [PaketController::class, 'paketDetail']);
         Route::get('/list', [PaketController::class, 'listDetail']);
+        Route::post('/list', [PaketController::class, 'paketAddDet']);
         Route::get('/create',  function(){
             return view('paket.create', ['title'=>'Create Paket Wisata']);
         });

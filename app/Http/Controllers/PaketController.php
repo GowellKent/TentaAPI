@@ -554,6 +554,9 @@ class PaketController extends Controller
         }
 
         $tph_kode = $request->input("tph_kode");
+        $head = DB::table('tvl_paket_heads')
+        ->where('tph_kode', $tph_kode)
+        ->get();
 
         $respDetail = DB::table('tvl_paket_dets')
             ->select("tpd_tph_kode", "tpd_kode", "tot_kode", "tot_nama", "tot_alamat", "tot_tk_kode", "tk_nama", "tot_tp_kode", "tp_nama", "tot_tjo_kode", "tjo_desc", "tot_harga", "tpd_hari", "tpd_jam")
@@ -565,7 +568,7 @@ class PaketController extends Controller
             ->get();
 
             // if (count($respDetail->all()) > 0) {
-                return view('paket.list', ['responseDet' => $respDetail, 'title' => 'List Objek Paket Wisata']);
+                return view('paket.list', ['head' => $head,'responseDet' => $respDetail, 'title' => 'List Objek Paket Wisata']);
             // }
             // else {
             //     return back();
@@ -609,5 +612,52 @@ class PaketController extends Controller
         //failed save to database
         return back()->withInput()->with("CRUDError", "Update Paket Failed!");
 
+    }
+
+    function paketAddDet(Request $request){
+        $validate = Validator::make($request->all(), [
+            'tpd_tph_kode' => 'required',
+            'tpd_tot_kode' => 'required',
+            'tpd_hari' => 'required',
+            'tpd_jam' => 'required',
+        ]);
+
+        //response error validation
+        if ($validate->fails()) {
+            return back()->withInput()->with("CRUDError", "Insert Detail Failed!");
+
+        }
+
+        // $data = array_keys((array)$request->input());
+        $resp = DB::table("tvl_paket_dets")->max('tpd_kode') + 1 ;
+
+        $data = array();
+        foreach (array_keys((array)$request->input()) as $value) {
+            $data[$value] = $request->input($value);
+            $data['tpd_kode'] = $resp;
+        }
+        
+
+        //save to DB
+        $paketDet = tvl_paket_det::create($data);
+
+        if ($paketDet) {
+            $tph_kode = $request->input('tpd_tph_kode');
+            $hargaAwal = DB::table("tvl_paket_heads")->select("tph_harga")->where("tph_kode", $tph_kode)->get();
+            $hargaObjek= DB::table("tvl_objek_tujuans")->select("tot_harga")->where("tot_kode",  $request->input("tpd_tot_kode"))->get();
+
+            $hargaUpd = (int)$hargaAwal[0]->tph_harga + $hargaObjek[0]->tot_harga;
+
+            $paket =    DB::table("tvl_paket_heads")
+                ->where('tph_kode', $tph_kode)
+                ->limit(1)
+                ->update(array("tph_harga" => $hargaUpd));
+
+            return back();
+
+        }
+
+        //failed save to database
+        return back()->withInput()->with("CRUDError", "Insert Detail Failed!");
     }
 }
