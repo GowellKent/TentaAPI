@@ -88,6 +88,13 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
     //group function RESERVASI  ========================================================================================================  
     Route::group(['prefix' => 'reservasi'], function(){
         Route::get('/index', [ReservasiController::class, 'index']);
+        Route::post('/create', [ReservasiController::class, 'resCreate']);
+        Route::get('/create',function(){
+            return view('reservasi.create', ['title' => 'Create Reservasi']);
+        });
+        // Route::get('/paket', function(){
+        //     return view('reservasi.paket', ['title' => 'Create Reservasi']);
+        // });
     });     
 });
 

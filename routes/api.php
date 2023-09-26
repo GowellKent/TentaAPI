@@ -51,7 +51,7 @@ Route::group(['prefix' => 'paket', 'middleware' => 'auth:sanctum'], function(){
         Route::get('/all', [PaketController::class, 'getAllHead']);
         Route::get('/find', [PaketController::class, 'findHead']);
         Route::get('/jenis', [PaketController::class, 'jenis'])->withoutMiddleware('auth:sanctum');
-        Route::get('/search', [PaketController::class, 'searchHead']);
+        Route::get('/search', [PaketController::class, 'searchHead'])->withoutMiddleware('auth:sanctum');
         Route::post('/store', [PaketController::class, 'storeHead']);
         Route::post('/update', [PaketController::class, 'updateHead']);
         Route::post('/delete', [PaketController::class, 'deleteHead']);
@@ -73,7 +73,7 @@ Route::group(['prefix' => 'transport', 'middleware' => 'auth:sanctum'], function
     // Route::post('/store', [TransportController::class, 'store']);
     // Route::post('/update', [TransportController::class, 'update']);
     // Route::post('/delete', [TransportController::class, 'delete']);
-    Route::post('/search', [TransportController::class, 'searchByRoute']);
+    Route::get('/search', [TransportController::class, 'searchByRoute'])->withoutMiddleware('auth:sanctum');
 });
 
 //group route objek ==========================================================================================================================================

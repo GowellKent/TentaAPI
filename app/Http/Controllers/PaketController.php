@@ -59,8 +59,8 @@ class PaketController extends Controller
 
     public function searchHead(Request $request){
         $validate = Validator::make($request->all(), [
-            'tph_kota_asal' => 'required',
-            'tph_kota_tujuan' => 'required',
+            'tph_tk_kode_asal' => 'required',
+            'tph_tk_kode_tujuan' => 'required',
             'tph_tjt_kode' => 'required'
         ]);
         
@@ -69,14 +69,13 @@ class PaketController extends Controller
             return response()->json($validate->errors(), 400);
         }
         
-        $kota_asal = $request->input("tph_kota_asal");
-        $kota_tujuan = $request->input("tph_kota_tujuan");
+        $tk_kode_asal = $request->input("tph_tk_kode_asal");
+        $tk_kode_tujuan = $request->input("tph_tk_kode_tujuan");
         $tjt_kode = $request->input("tph_tjt_kode");
 
         $resp = DB::table("tvl_paket_heads")
-        ->select("tph_kode", "tph_nama", "tph_harga", "tph_durasi", "tph_min_pax", "tph_max_pax")
-        ->where("tph_kota_asal", $kota_asal)
-        ->where("tph_kota_tujuan", $kota_tujuan)
+        ->where("tph_tk_kode_asal", $tk_kode_asal)
+        ->where("tph_tk_kode_tujuan", $tk_kode_tujuan)
         ->where("tph_tjt_kode", $tjt_kode)
         ->get();
    

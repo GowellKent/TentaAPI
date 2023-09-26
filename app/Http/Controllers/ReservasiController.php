@@ -560,4 +560,94 @@ class ReservasiController extends Controller
     return view('reservasi.index', ['response' => $response, 'title' => 'Reservasi']);
 
     }
+
+    function resCreate(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'trh_tph_kode' => 'required',
+            'trh_tu_kode' => 'required',
+            'trh_tgl_jalan' => 'required',
+            'trh_pax' => 'required',
+            'trh_tt_kode' => 'required'
+        ]);
+
+        //response error validation
+        if ($validate->fails()) {
+            return back()->withInput()->with("CRUDError", "Create Reservasi Validate Failed!");
+        }
+
+        //get max value of primary key for sequencing
+        $trh_kode = DB::table("tvl_reservasi_heads")->max('trh_kode') + 1;
+
+        $trh_tph_kode = $request->input("trh_tph_kode");
+        $trh_tt_kode = $request->input('trh_tt_kode');
+
+        $head = DB::table('tvl_paket_heads')
+            ->where("tph_kode", $trh_tph_kode)
+            ->get();
+
+        $hargaTp = DB::table('tvl_transports')
+            ->select("tt_harga")->where("tt_kode", $trh_tt_kode)->get();
+
+        $hargaTotal = (int)($head[0]->tph_harga + $hargaTp[0]->tt_harga) * (int)$request->input('trh_pax');
+
+        //get all params to data Array
+        if ($head) {
+            $data = array();
+            foreach (array_keys((array)$request->input()) as $value) {
+                $data[$value] = $request->input($value);
+                $data['trh_kode'] = $trh_kode;
+                $data['trh_harga'] = $hargaTotal;
+                $data['trh_durasi'] = $head[0]->tph_durasi;
+                $data['trh_tp_kode_asal'] = $head[0]->tph_tp_kode_asal;
+                $data['trh_tk_kode_asal'] = $head[0]->tph_tk_kode_asal;
+                $data['trh_tp_kode_tujuan'] = $head[0]->tph_tp_kode_tujuan;
+                $data['trh_tk_kode_tujuan'] = $head[0]->tph_tk_kode_tujuan;
+                $data['trh_tt_kode'] = $trh_tt_kode;
+                $data['trh_tgl_reservasi'] = Carbon::now()->format('Y-m-d');
+                $data['trh_tsr_kode'] = 2;
+            }
+
+            $reservasi = tvl_reservasi_head::create($data);
+
+            if ($reservasi) {
+                $det = DB::table("tvl_paket_dets")
+                    ->select("tpd_kode as trd_tpd_kode", "tpd_tot_kode as trd_tot_kode", "tpd_hari as trd_hari", "tpd_jam as trd_jam")
+                    ->where("tpd_tph_kode", $trh_tph_kode)
+                    ->get()
+                    ->all();
+
+                $trd_kode = DB::table("tvl_reservasi_dets")->max('trd_kode') + 1;
+                $i = 0;
+                $dataDetail = array();
+                foreach ($det as $dets) {
+                    $dataDetail['trd_kode'] = $trd_kode + $i;
+                    $dataDetail['trd_tot_kode'] = $det[$i]->trd_tot_kode;
+                    $dataDetail['trd_hari'] = $det[$i]->trd_hari;
+                    $dataDetail['trd_jam'] = $det[$i]->trd_jam;
+                    $dataDetail['trd_trh_kode'] = $trh_kode;
+
+                    $reservasiDet = tvl_reservasi_det::create($dataDetail);
+
+                    $i++;
+                }
+
+                return redirect('/admin/reservasi/index');
+            }
+        } else {
+            return back()->withInput()->with("CRUDError", "Create Reservasi Failed!");
+        }
+
+
+
+        // if ($reservasi && $reservasiDet) {
+
+        //     // $redirectURL = (string)'/resDetail?trh_kode=' . $trh_kode;
+        //     // return redirect($redirectURL);
+        //     return redirect('/admin/reservasi/index');
+        // }
+
+        // //failed save to database
+        // return back()->withInput()->with("CRUDError", "Create Reservasi Failed!");
+    }
 }

@@ -170,8 +170,8 @@ class TransportController extends Controller
 
     public function searchByRoute(Request $request){
         $validate = Validator::make($request->all(), [
-            'tt_kota_asal' => 'required',
-            'tt_kota_tujuan' => 'required',
+            'tt_tk_kode_asal' => 'required',
+            'tt_tk_kode_tujuan' => 'required',
         ]);
 
         //response error validation
@@ -180,8 +180,8 @@ class TransportController extends Controller
         }
 
             $resp = DB::table("tvl_transports")
-                ->where("tt_kota_asal", $request->input("tt_kota_asal"))
-                ->where("tt_kota_tujuan", $request->input("tt_kota_tujuan"))
+                ->where("tt_tk_kode_asal", $request->input("tt_tk_kode_asal"))
+                ->where("tt_tk_kode_tujuan", $request->input("tt_tk_kode_tujuan"))
                 ->get();
             if (count($resp->all()) > 0) {
                 return  $resp;
@@ -340,5 +340,31 @@ class TransportController extends Controller
 
         return back();
 
+    }
+
+    public function searchTransport(Request $request){
+        $validate = Validator::make($request->all(), [
+            'tt_tk_kode_asal' => 'required',
+            'tt_tk_kode_tujuan' => 'required',
+        ]);
+
+        //response error validation
+        if ($validate->fails()) {
+            return response()->json($validate->errors(), 400);
+        }
+
+            $resp = DB::table("tvl_transports")
+                ->where("tt_tk_kode_asal", $request->input("tt_tk_kode_asal"))
+                ->where("tt_tk_kode_tujuan", $request->input("tt_tk_kode_tujuan"))
+                ->get();
+            if (count($resp->all()) > 0) {
+                return  $resp;
+            } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Transport Not Found',
+
+            ], 404);
+        }
     }
 }

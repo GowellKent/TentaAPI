@@ -3,7 +3,7 @@
 
     <body>
     @section('button')
-        <a class="btn px-lg-3 my-3 mx-2 btn-success float-end" href="/resCreate"><i class="bi bi-database-add"></i> Create</a>
+        <a class="btn px-lg-3 my-3 mx-2 btn-success float-end" href="/admin/reservasi/create"><i class="bi bi-database-add"></i> Create</a>
         <a class="btn px-lg-3 my-3 btn-outline-success float-end" href="/resCustom"><i class="bi bi-database-gear"></i>
             Custom</a>
     @endsection
