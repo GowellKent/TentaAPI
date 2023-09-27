@@ -726,4 +726,55 @@ class ReservasiController extends Controller
             return back();
         }
     }
+
+    function resUpdate(Request $request, tvl_reservasi_head $reservasi)
+    {
+        $trh_kode = $request->input('trh_kode');
+
+        $validate = Validator::make($request->all(), [
+            'trh_kode' => 'required'
+        ]);
+
+        // response error validation
+        if ($validate->fails()) {
+            return back()->withInput()->with("CRUDError", "Update reservasi Failed!");
+        }
+
+        //find paket tujuan by tph_kode
+        $reservasi = tvl_reservasi_head::where('trh_kode', $trh_kode)->firstOrFail();
+
+        //save to DB
+
+        if ($reservasi) {
+
+            $data = array();
+            if ($request->has("trh_tt_kode")) {
+                $hargaLama = DB::table("tvl_reservasi_heads")->select("trh_tt_kode", "trh_harga")->where('trh_kode', $trh_kode)->get();
+                $hargaBusBrkLama = DB::table("tvl_transports")->select("tt_harga")->where("tt_kode", $hargaLama[0]->trh_tt_kode)->get();
+                // $hargaBusPulLama = DB::table("tvl_transports")->select("tb_harga")->where("tb_kode", $hargaLama[0]->trh_tb_kode_pul)->get();
+                $hargaBusBrkBaru = DB::table('tvl_transports')
+                    ->select("tt_harga")->where("tt_kode", $request->input("trh_tt_kode"))->get();
+                // $hargaBusPulBaru = DB::table('tvl_transports')
+                //     ->select("tb_harga")->where("tb_kode", $request->input("trh_tb_kode_pul"))->get();
+
+                $hargaBaru = (int)$hargaLama[0]->trh_harga - (int)$hargaBusBrkLama[0]->tt_harga + (int)$hargaBusBrkBaru[0]->tt_harga;
+
+                $data["trh_harga"] = (int)$hargaBaru;
+            } 
+
+            foreach (array_keys((array)$request->except("_token")) as $value) {
+                $data[$value] = $request->input($value);
+            }
+
+            $reservasi =    DB::table("tvl_reservasi_heads")
+                ->where('trh_kode', $trh_kode)
+                ->limit(1)
+                ->update($data);
+
+            return redirect()->intended('/admin/reservasi/index');
+        }
+
+        //failed save to database
+        return back()->withInput()->with("CRUDError", "Update reservasi Failed!");
+    }
 }

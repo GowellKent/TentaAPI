@@ -89,6 +89,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
     Route::group(['prefix' => 'reservasi'], function(){
         Route::get('/index', [ReservasiController::class, 'index']);
         Route::post('/create', [ReservasiController::class, 'resCreate']);
+        Route::post('/update', [ReservasiController::class, 'resUpdate']);
         Route::get('/create',function(){
             return view('reservasi.create', ['title' => 'Create Reservasi']);
         });
