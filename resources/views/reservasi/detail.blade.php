@@ -21,7 +21,7 @@
                     </label>
                 </div>
                 <div class="form-floating my-3">
-                    <input type="text" class="form-control" readonly value="{{ $response[0]->trh_tu_kode }}"
+                    <input type="text" class="form-control" readonly value="{{ $response[0]->trh_tu_kode }}" disabled
                         id="floatingtrh_tu_kode">
                     <label for="floatingtrh_tu_kode">
                         <h6>Kode Client</h6>
@@ -172,15 +172,17 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
-                                    {{-- <button type="submit" class="btn btn-primary">Save</button> --}}
                                 </div>
-                                {{-- </form> --}}
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
+                    <div class="col float-start">
+                        <a class="btn btn-outline-success mt-3 float-start" href="{{ '/admin/reservasi/list?trh_kode='.$response[0]->trh_kode}}"
+                            style="max-width: fit-content">List Objek<i class="bi bi-chevron-right"></i></a>
+                    </div>
                     <div class="col float-end">
                         <button class="btn btn-primary mt-3 float-end" type="submit"
                             style="max-width: fit-content">Update
@@ -190,8 +192,6 @@
             </form>
         </div>
     </div>
-
-    {{-- </div> --}}
 @endsection
 
 

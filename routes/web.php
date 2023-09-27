@@ -95,8 +95,9 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
         });
         Route::get('/delete', [ReservasiController::class, 'resDelete']);
         Route::get('/detail', [ReservasiController::class, 'resDetail']);
-        // Route::get('/paket', function(){
-        //     return view('reservasi.paket', ['title' => 'Create Reservasi']);
+        Route::get('/list', [ReservasiController::class, 'reslist']);
+        // Route::get('/list', function(){
+        //     return view('reservasi.list', ['title' => 'List Objek Reservasi']);
         // });
     });     
 });
