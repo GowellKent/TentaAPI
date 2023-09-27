@@ -54,7 +54,7 @@
         // console.log(tph_kode)
         let stringConfirm = "Data reservasi " + trh_kode + " akan dihapus"
         if (confirm(stringConfirm)) {
-            fetch("/resDelete?trh_kode=" + trh_kode)
+            fetch("/admin/reservasi/delete?trh_kode=" + trh_kode)
                 .then(() => {
                     window.location.reload();
                 }).catch((err) => function() {

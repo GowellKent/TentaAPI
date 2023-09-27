@@ -92,6 +92,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
         Route::get('/create',function(){
             return view('reservasi.create', ['title' => 'Create Reservasi']);
         });
+        Route::get('/delete', [ReservasiController::class, 'resDelete']);
         // Route::get('/paket', function(){
         //     return view('reservasi.paket', ['title' => 'Create Reservasi']);
         // });

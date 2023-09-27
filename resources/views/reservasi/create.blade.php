@@ -144,14 +144,6 @@
                                     <h3 class="card-title mt-3 text-light">Pilih transportasi</h3>
                                 </div>
                                 <div class="card-body">
-                                    {{-- <h1>test card body 2</h1>
-                                    <div class="form-floating my-3">
-                                        <select class="form-control" id="floatingtrh_tb_kode" name="trh_tb_kode">
-                                            <option value=null>--Pilih Transportasi--</option>
-                                        </select>
-                                        <label for="floatingtrh_tb_kode">
-                                            <h6>Pilih Transportasi</h6>
-                                        </label> --}}
 
                                         <div class="form-floating">
                                             <div id="radioTp"></div>

@@ -650,4 +650,38 @@ class ReservasiController extends Controller
         // //failed save to database
         // return back()->withInput()->with("CRUDError", "Create Reservasi Failed!");
     }
+
+    function resDelete(Request $request, tvl_reservasi_head $reservasi)
+    {
+
+        $trh_kode = $request->input('trh_kode');
+
+        $validate = Validator::make($request->all(), [
+            'trh_kode' => 'required'
+        ]);
+
+        // response error validation
+        if ($validate->fails()) {
+            return back();
+        }
+
+        //find reservasi tujuan by tph_kode
+        $reservasi = tvl_reservasi_head::where('trh_kode', $trh_kode)->firstOrFail();
+        // $det = tvl_reservasi_det::where("tpd_tph_kode", $tph_kode);
+
+        //save to DB
+
+        if ($reservasi) {
+
+            $reservasi =    DB::table("tvl_reservasi_heads")
+                ->where('trh_kode', $trh_kode)
+                ->limit(1)
+                ->delete();
+
+            return back();
+        } else {
+            //failed save to database
+            return back();
+        }
+    }
 }
