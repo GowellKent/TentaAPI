@@ -684,4 +684,46 @@ class ReservasiController extends Controller
             return back();
         }
     }
+
+    function resDetail(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'trh_kode' => 'required'
+        ]);
+
+        //response error validation
+        if ($validate->fails()) {
+            return back();
+        }
+
+        $dataHead = DB::table("tvl_reservasi_heads")
+            ->select('trh_kode', 'trh_tph_kode', 'tph_nama', 'trh_tu_kode', 'trh_tp_kode_asal', 'a.tp_nama as trh_tp_nama_asal', 'trh_tk_kode_asal', 'b.tk_nama as trh_tk_nama_asal',
+            'trh_tp_kode_tujuan', 'c.tp_nama as trh_tp_nama_tujuan', 'trh_tk_kode_tujuan', 'd.tk_nama as trh_tk_nama_tujuan', 'trh_tgl_reservasi', 'trh_tgl_jalan', 'trh_pax', 
+            'trh_tsr_kode', 'tsr_desc', 'trh_harga', 'trh_durasi', 'trh_tt_kode', 'tt_nama')
+            ->join("tvl_paket_heads", "trh_tph_kode", "=", "tph_kode")
+            ->join("tvl_provinsis as a", "trh_tp_kode_asal", "=", "a.tp_kode")
+            ->join("tvl_kotas as b", "trh_tk_kode_asal", "=", "b.tk_kode")
+            ->join("tvl_provinsis as c", "trh_tp_kode_tujuan", "=", "c.tp_kode")
+            ->join("tvl_kotas as d", "trh_tk_kode_tujuan", "=", "d.tk_kode")
+            ->join("users", "trh_tu_kode", "=", "id")
+            ->join("tvl_status_reservasis", "trh_tsr_kode", "=", "tsr_kode")
+            ->join("tvl_transports", "trh_tt_kode", "=", "tt_kode")
+            ->where("trh_kode", $request->input('trh_kode'))
+            ->get();
+
+        $dataDetail = DB::table("tvl_reservasi_dets")
+            ->select("trd_kode", "tot_kode", "tjo_desc", "tot_nama", "tot_alamat", "tk_nama", "tp_nama", "trd_hari", "trd_jam")
+            ->join("tvl_objek_tujuans", "trd_tot_kode", "=", "tot_kode")
+            ->join("tvl_jenis_objeks", "tot_tjo_kode", "=", "tjo_kode")
+            ->join("tvl_kotas", "tot_tk_kode", "=", "tk_kode")
+            ->join("tvl_provinsis", "tot_tp_kode", "=", "tp_kode")
+            ->where("trd_trh_kode", $request->input('trh_kode'))
+            ->get();
+
+        if (count($dataHead->all()) > 0) {
+            return view('reservasi.detail', ['response' => $dataHead, 'responseDet' => $dataDetail, 'title' => 'Detail Reservasi']);
+        } else {
+            return back();
+        }
+    }
 }

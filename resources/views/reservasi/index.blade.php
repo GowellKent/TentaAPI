@@ -25,7 +25,7 @@
             <tbody id="indexTable">
                 @foreach ($response as $key => $response)
                     <tr class="align-middle">
-                        <td><a href="{{ '/resDetail?trh_kode=' . $response->trh_kode }}">{{ $response->trh_kode }}</td>
+                        <td><a href="{{ '/admin/reservasi/detail?trh_kode=' . $response->trh_kode }}">{{ $response->trh_kode }}</td>
                         <td>{{ $response->tph_nama }}</td>
                         <td>{{ $response->name }}</td>
                         <td>{{ $response->trh_tgl_reservasi }}</td>
