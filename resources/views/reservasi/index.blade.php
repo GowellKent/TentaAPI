@@ -4,8 +4,8 @@
     <body>
     @section('button')
         <a class="btn px-lg-3 my-3 mx-2 btn-success float-end" href="/admin/reservasi/create"><i class="bi bi-database-add"></i> Create</a>
-        <a class="btn px-lg-3 my-3 btn-outline-success float-end" href="/resCustom"><i class="bi bi-database-gear"></i>
-            Custom</a>
+        {{-- <a class="btn px-lg-3 my-3 btn-outline-success float-end" href="/resCustom"><i class="bi bi-database-gear"></i>
+            Custom</a> --}}
     @endsection
     <div class="table-responsive rounded-3" style="height: 55em; overflow: auto;" class="mt-4">
         <table class="table table-striped table-bordered" id="example">

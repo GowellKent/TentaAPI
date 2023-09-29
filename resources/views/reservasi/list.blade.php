@@ -36,8 +36,8 @@
                                 <td>{{ $responseDet->tot_kode }}</td>
                                 <td>{{ $responseDet->tjo_desc }}</td>
                                 <td>{{ $responseDet->tot_nama }}</td>
-                                <td>{{ $responseDet->tot_alamat }}, {{ $responseDet->tot_kota }},
-                                    {{ $responseDet->tot_provinsi }}</td>
+                                <td>{{ $responseDet->tot_alamat }}, {{ $responseDet->tk_nama }},
+                                    {{ $responseDet->tp_nama }}</td>
                                 <td><select class="form-control"
                                         id="{{ 'floatingtrd_hari' . $responseDet->trd_kode }}"
                                         name="tpd_hari">

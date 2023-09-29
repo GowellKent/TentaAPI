@@ -632,7 +632,7 @@ class ReservasiController extends Controller
                     $i++;
                 }
 
-                return redirect('/admin/reservasi/index');
+                return redirect('/admin/reservasi/list?trh_kode='.$trh_kode);
             }
         } else {
             return back()->withInput()->with("CRUDError", "Create Reservasi Failed!");
