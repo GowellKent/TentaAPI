@@ -141,8 +141,11 @@
             </nav>
 
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="green-text"><strong>{{$title}}</strong></h1>
+                <div class="d-flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    @if (url()->current() != "http://127.0.0.1:8000/admin/dashboard")
+                    <a class="btn btn-outline-success me-5 mb-2" href="{{url()->previous()}}"><i class="bi bi-chevron-left"></i>Back</a>
+                    @endif
+                    <h1 class="green-text float-start"><strong>{{$title}}</strong></h1>
                 </div>
 
                 <div class="row justify-content-center">

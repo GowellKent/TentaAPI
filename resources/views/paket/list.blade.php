@@ -3,11 +3,6 @@
 
     <body>
         <div class="row my-3">
-            <div class="col-md-2">
-                <a class="btn btn-lg px-lg-3 btn-outline-success float-start"
-                    href="/admin/paket/detail?tph_kode={{ $head[0]->tph_kode }}"><i class="bi bi-chevron-left"></i>
-                    Back</a>
-            </div>
             <div class="col-md-5">
                 <div class="input-group">
                     <input class="form-control border rounded" type="search" id="searchBar" placeholder="Search...">

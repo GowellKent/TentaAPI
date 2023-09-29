@@ -1,11 +1,16 @@
 @extends('layout/form')
 @section('container')
 <body>
-    <div class="card mx-auto mt-5">
-        <div class="card-header float-end">
-            <div class="row">
-                <div class="col">
-                    <h5 class="pt-3"><Strong>List Objek Reservasi</Strong></h5>
+    {{-- <div class="card mx-auto mt-5"> --}}
+        {{-- <div class="card-header float-end"> --}}
+            <div class="row my-3">
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <input class="form-control border rounded" type="search" id="searchBar" placeholder="Search...">
+                        <div class="input-group-append">
+                            <span class="input-group-text py-sm-3 rounded-right"><i class="bi bi-search"></i></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="col">
                     <button class="btn btn-primary float-end" type="button" data-toggle="modal"
@@ -13,8 +18,8 @@
                             style="font-size: 24pt"></i></button>
                 </div>
             </div>
-        </div>
-        <div class="card-body" style="background-color: #FFFFFF">
+        {{-- </div> --}}
+        {{-- <div class="card-body" style="background-color: #FFFFFF"> --}}
             <div class="table-responsive rounded-3" style="height: 40em; overflow: auto;"
                 class="mt-4">
                 <table class="table table-striped table-bordered">
@@ -65,7 +70,7 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        {{-- </div> --}}
     </div>
 
     <!-- Modal -->
@@ -140,3 +145,15 @@
     </div>
 </body>
 @endsection
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $("#searchBar").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#indexTable tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
