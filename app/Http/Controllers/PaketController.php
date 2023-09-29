@@ -660,4 +660,84 @@ class PaketController extends Controller
         //failed save to database
         return back()->withInput()->with("CRUDError", "Insert Detail Failed!");
     }
+
+    public function paketUpdateDet(Request $request, tvl_paket_det $det){
+        
+        $tpd_kode = $request->input('tpd_kode');
+
+        $validate = Validator::make($request->all(), [
+            'tpd_kode' => 'required'
+        ]);
+
+        // response error validation
+        if ($validate->fails()) {
+            return back()->withInput()->with("CRUDError", "Update Detail Failed!");
+        }
+
+        //find Detail Paket by tpd_kode
+        $det = tvl_paket_det::where('tpd_kode', $tpd_kode)->firstOrFail();
+
+        //save to DB
+
+        if ($det) {
+
+            $data = array();
+            foreach (array_keys((array)$request->input()) as $value) {
+                $data[$value] = $request->input($value);
+            }
+
+            $det = DB::table("tvl_paket_dets")
+                ->where('tpd_kode', $tpd_kode)
+                ->limit(1)
+                ->update($data);
+
+            return back();
+        }
+
+        //failed save to database
+        return back()->with('CRUDError', 'Failed to Update!');
+        }
+
+        function detailDelete(Request $request, tvl_paket_det $paket){
+
+            $tpd_kode = $request->input('tpd_kode');
+    
+            $validate = Validator::make($request->all(), [
+                'tpd_kode' => 'required'
+            ]);
+    
+            // response error validation
+            if ($validate->fails()) {
+                return back()->withInput()->with("CRUDError", "Delete Detail Failed!");
+            }
+    
+            //find Detail Paket by tpd_kode
+            $paket = tvl_paket_det::where('tpd_kode', $tpd_kode)->firstOrFail();
+            $detail = DB::table("tvl_paket_dets")->select("tpd_tph_kode", "tpd_tot_kode")->where("tpd_kode", $tpd_kode)->get();
+            //save to DB
+    
+            if ($paket) {
+    
+                // $tph_kode = $request->input('tpd_tph_kode');
+                $hargaAwal = DB::table("tvl_paket_heads")->select("tph_harga")->where("tph_kode", $detail[0]->tpd_tph_kode)->get();
+                $hargaObjek= DB::table("tvl_objek_tujuans")->select("tot_harga")->where("tot_kode",  $detail[0]->tpd_tot_kode)->get();
+    
+                $hargaUpd = (int)$hargaAwal[0]->tph_harga - $hargaObjek[0]->tot_harga;
+    
+                $paket =    DB::table("tvl_paket_heads")
+                    ->where('tph_kode', $detail[0]->tpd_tph_kode)
+                    ->limit(1)
+                    ->update(array("tph_harga" => $hargaUpd));
+    
+                $paket =    DB::table("tvl_paket_dets")
+                    ->where('tpd_kode', $tpd_kode)
+                    ->limit(1)
+                    ->delete();
+    
+                return back();
+            } else {
+                //failed save to database
+                return back()->withInput()->with("CRUDError", "Delete Detail Failed!");
+            }
+        }
 }

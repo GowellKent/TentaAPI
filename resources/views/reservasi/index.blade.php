@@ -34,7 +34,7 @@
                         <td>{{ $response->tsr_desc }}</td>
                         <td class="text-center">
                             <a class="btn btn-lg-2 px-sm-3 btn-primary align-center"
-                                href="{{ '/resCetak?trh_kode=' . $response->trh_kode }}"><i
+                                href="{{ '/admin/reservasi/print?trh_kode=' . $response->trh_kode }}"><i
                                     class="bi bi-printer"></i></a>
                             <button class="btn btn-lg-2 px-sm-3 btn-danger align-center"
                                 onclick="resDelete({{ $response->trh_kode }})"><i class="bi bi-trash-fill"></i></button>

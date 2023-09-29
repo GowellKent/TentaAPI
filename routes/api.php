@@ -60,8 +60,8 @@ Route::group(['prefix' => 'paket', 'middleware' => 'auth:sanctum'], function(){
         Route::get('/all', [PaketController::class, 'getAllDet']);
         Route::get('/find', [PaketController::class, 'findDet']);
         Route::post('/store', [PaketController::class, 'storeDet']);
-        Route::post('/update', [PaketController::class, 'updateDet']);
-        Route::post('/delete', [PaketController::class, 'deleteDet']);
+        Route::get('/update', [PaketController::class, 'updateDet'])->withoutMiddleware('auth:sanctum');
+        Route::get('/delete', [PaketController::class, 'deleteDet']);
 
     });
 });

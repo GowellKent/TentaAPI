@@ -68,6 +68,8 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
         Route::post('/create', [PaketController::class, 'paketCreate']);
         Route::get('/delete', [PaketController::class, 'paketDelete']);
         Route::post('/update', [PaketController::class, 'paketUpdate']);
+        Route::get('/upDet', [PaketController::class, 'paketUpdateDet']);
+        Route::get('/delDet', [PaketController::class, 'detailDelete']);
         // Route::get('/list', function(){
         //     return view('paket.list', ['title' => 'List Objek Paket Wisata']);
         // });

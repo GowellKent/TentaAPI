@@ -178,7 +178,7 @@
     function delDet(tpd_kode) {
         let stringConfirm = "Data reservasi " + tpd_kode + " akan dihapus"
         if (confirm(stringConfirm)) {
-            fetch("/detailDelete?tpd_kode=" + tpd_kode)
+            fetch("/admin/paket/delDet?tpd_kode=" + tpd_kode)
                 .then(() => {
                     window.location.reload();
                 }).catch((err) => function() {
@@ -189,18 +189,21 @@
     }
 
     function updateDet(tpd_kode) {
+        
+        var kode =  tpd_kode
+        var hari = $("#floatingtpd_hari" + tpd_kode).val()
+        var jam =  $("#tpd_jam" + tpd_kode).val()
+
+        var stringURL = "/api/paket/det/update?tpd_kode="+ tpd_kode +"&tpd_hari="+ hari + "&tpd_jam=" + jam
+
         let stringConfirm = "Data Detail Paket " + tpd_kode + " akan dirubah"
         if (confirm(stringConfirm)) {
-            fetch("/updatePaketDet?" + new URLSearchParams({
-                    "tpd_kode": tpd_kode,
-                    "tpd_hari": $("#floatingtpd_hari" + tpd_kode).val(),
-                    "tpd_jam": $("#tpd_jam" + tpd_kode).val()
-                }))
+            fetch(stringURL)
                 .then(() => {
                     window.location.reload();
                 }).catch((err) => function() {
                     console.log(err)
-
+                    window.location.reload()
                 })
         }
     }
