@@ -96,8 +96,11 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
             return view('reservasi.create', ['title' => 'Create Reservasi']);
         });
         Route::get('/delete', [ReservasiController::class, 'resDelete']);
+        Route::get('/delDet', [ReservasiController::class, 'resDelDet']);
         Route::get('/detail', [ReservasiController::class, 'resDetail']);
         Route::get('/list', [ReservasiController::class, 'reslist']);
+        Route::post('/list', [ReservasiController::class, 'resAddDet']);
+
         // Route::get('/list', function(){
         //     return view('reservasi.list', ['title' => 'List Objek Reservasi']);
         // });

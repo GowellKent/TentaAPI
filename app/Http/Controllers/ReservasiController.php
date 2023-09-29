@@ -544,6 +544,50 @@ class ReservasiController extends Controller
         ], 409);
     }
 
+    function updateDet(Request $request, tvl_reservasi_det $head){
+        $trd_kode = $request->input('trd_kode');
+
+        $validate = Validator::make($request->all(), [
+            'trd_kode' => 'required'
+        ]);
+
+        // response error validation
+        if ($validate->fails()) {
+            return response()->json($validate->errors(), 400);
+        }
+
+        //find Detail reservasi by trd_kode
+        $det = tvl_reservasi_det::where('trd_kode', $trd_kode)->firstOrFail();
+
+        //save to DB
+
+        if ($det) {
+
+            $data = array();
+            foreach (array_keys((array)$request->input()) as $value) {
+                $data[$value] = $request->input($value);
+            }
+
+            $det = DB::table("tvl_reservasi_dets")
+                ->where('trd_kode', $trd_kode)
+                ->limit(1)
+                ->update($data);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Detail reservasi Updated',
+                'data'    => $request->input()
+            ], 201);
+        }
+
+        //failed save to database
+        return response()->json([
+            'success' => false,
+            'message' => 'Detail reservasi Failed to Update',
+            'data' => $request->input()
+        ], 409);
+    }
+
 
     //===================================================================================================================================
     // VIEW FUNCTIONS
@@ -817,5 +861,92 @@ class ReservasiController extends Controller
 
         //failed save to database
         return back()->withInput()->with("CRUDError", "Update reservasi Failed!");
+    }
+
+    function resAddDet(Request $request){
+        $validate = Validator::make($request->all(), [
+            'trd_trh_kode' => 'required',
+            'trd_tot_kode' => 'required'
+        ]);
+
+        //response error validation
+        if ($validate->fails()) {
+            return back()->withInput()->with("CRUDError", "Insert Detail Failed!");
+        }
+
+        // $data = array_keys((array)$request->input());
+        $resp = DB::table("tvl_reservasi_dets")->max('trd_kode') + 1;
+
+        $data = array();
+        foreach (array_keys((array)$request->input()) as $value) {
+            $data[$value] = $request->input($value);
+            $data['trd_kode'] = $resp;
+        }
+
+
+        //save to DB
+        $paketDet = tvl_reservasi_det::create($data);
+
+        if ($paketDet) {
+            $trh_kode = $request->input('trd_trh_kode');
+            $hargaAwal = DB::table("tvl_reservasi_heads")->select("trh_harga")->where("trh_kode", $trh_kode)->get();
+            $hargaObjek = DB::table("tvl_objek_tujuans")->select("tot_harga")->where("tot_kode",  $request->input("trd_tot_kode"))->get();
+
+            $hargaUpd = (int)$hargaAwal[0]->trh_harga + $hargaObjek[0]->tot_harga;
+
+            $paket =    DB::table("tvl_reservasi_heads")
+                ->where('trh_kode', $trh_kode)
+                ->limit(1)
+                ->update(array("trh_harga" => $hargaUpd));
+
+            return back();
+        }
+
+        //failed save to database
+        return back()->withInput()->with("CRUDError", "Insert Detail Failed!");
+    }
+
+    function resDelDet(Request $request, tvl_reservasi_det $reservasi)
+    {
+
+        $trd_kode = $request->input('trd_kode');
+
+        $validate = Validator::make($request->all(), [
+            'trd_kode' => 'required'
+        ]);
+
+        // response error validation
+        if ($validate->fails()) {
+            return back()->withInput()->with("CRUDError", "Delete Detail Failed!");
+        }
+
+        //find Detail Paket by trd_kode
+        $reservasi = tvl_reservasi_det::where('trd_kode', $trd_kode)->firstOrFail();
+        $detail = DB::table("tvl_reservasi_dets")->select("trd_trh_kode", "trd_tot_kode")->where("trd_kode", $trd_kode)->get();
+        //save to DB
+
+        if ($reservasi) {
+
+            // $tph_kode = $request->input('trd_tph_kode');
+            $hargaAwal = DB::table("tvl_reservasi_heads")->select("trh_harga")->where("trh_kode", $detail[0]->trd_trh_kode)->get();
+            $hargaObjek = DB::table("tvl_objek_tujuans")->select("tot_harga")->where("tot_kode",  $detail[0]->trd_tot_kode)->get();
+
+            $hargaUpd = (int)$hargaAwal[0]->trh_harga - $hargaObjek[0]->tot_harga;
+
+            $reservasi =    DB::table("tvl_reservasi_heads")
+                ->where('trh_kode', $detail[0]->trd_trh_kode)
+                ->limit(1)
+                ->update(array("trh_harga" => $hargaUpd));
+
+            $reservasi =    DB::table("tvl_reservasi_dets")
+                ->where('trd_kode', $trd_kode)
+                ->limit(1)
+                ->delete();
+
+            return back();
+        } else {
+            //failed save to database
+            return back()->withInput()->with("CRUDError", "Delete Detail Failed!");
+        }
     }
 }

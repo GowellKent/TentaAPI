@@ -61,7 +61,7 @@ Route::group(['prefix' => 'paket', 'middleware' => 'auth:sanctum'], function(){
         Route::get('/find', [PaketController::class, 'findDet']);
         Route::post('/store', [PaketController::class, 'storeDet']);
         Route::get('/update', [PaketController::class, 'updateDet'])->withoutMiddleware('auth:sanctum');
-        Route::get('/delete', [PaketController::class, 'deleteDet']);
+        Route::post('/delete', [PaketController::class, 'deleteDet']);
 
     });
 });
@@ -97,6 +97,9 @@ Route::group(['prefix' => 'reservasi', 'middleware' => 'auth:sanctum'], function
         Route::post('/update', [ReservasiController::class, 'updateHead']);
         Route::post('/delete', [ReservasiController::class, 'deleteHead']);
         Route::post('/user', [ReservasiController::class, 'searchByUser']);
+    });
+    Route::group(['prefix' => 'det'], function(){
+        Route::get('/update', [ReservasiController::class, 'updateDet']);
     });
 });
 
