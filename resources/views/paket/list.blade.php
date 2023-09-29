@@ -5,7 +5,7 @@
         <div class="row my-3">
             <div class="col-md-2">
                 <a class="btn btn-lg px-lg-3 btn-outline-success float-start"
-                    href="/admin/paket/detail?tph_kode={{ $responseDet[0]->tpd_tph_kode }}"><i class="bi bi-chevron-left"></i>
+                    href="/admin/paket/detail?tph_kode={{ $head[0]->tph_kode }}"><i class="bi bi-chevron-left"></i>
                     Back</a>
             </div>
             <div class="col-md-5">
@@ -84,7 +84,7 @@
                                 @csrf
                                 <div class="form-floating my-3">
                                     <input type="text" name="tpd_tph_kode" class="form-control" readonly
-                                        value="{{ $responseDet->tpd_tph_kode }}" id="floatingtph_kode">
+                                        value="{{ $head[0]->tph_kode }}" id="floatingtph_kode">
                                     <label for="floatingtph_kode">
                                         <h6>Kode Paket</h6>
                                     </label>

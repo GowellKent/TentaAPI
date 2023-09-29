@@ -567,10 +567,11 @@ class PaketController extends Controller
             ->get();
 
             // if (count($respDetail->all()) > 0) {
+                // $respDetail = [];
                 return view('paket.list', ['head' => $head,'responseDet' => $respDetail, 'title' => 'List Objek Paket Wisata']);
             // }
             // else {
-            //     return back();
+            //     return back()->with('CRUDError', 'Paket List Not Found!');;
             // }
     }
 
