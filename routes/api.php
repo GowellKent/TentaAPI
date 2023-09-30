@@ -96,11 +96,15 @@ Route::group(['prefix' => 'reservasi', 'middleware' => 'auth:sanctum'], function
         Route::post('/store', [ReservasiController::class, 'storeHead']);
         Route::post('/update', [ReservasiController::class, 'updateHead']);
         Route::post('/delete', [ReservasiController::class, 'deleteHead']);
-        Route::post('/user', [ReservasiController::class, 'searchByUser']);
     });
     Route::group(['prefix' => 'det'], function(){
+        Route::post('/add', [ReservasiController::class, 'addDataDet']);
+        Route::post('/multiadd', [ReservasiController::class, 'addMultiDataDet']);
         Route::get('/update', [ReservasiController::class, 'updateDet']);
     });
+
+    Route::post('/user', [ReservasiController::class, 'searchByUser']);
+    Route::post('/custom', [ReservasiController::class, 'customRes']);
 });
 
 //group route login ==========================================================================================================================================

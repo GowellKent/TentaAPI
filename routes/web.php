@@ -29,41 +29,41 @@ Route::get('/login', [LoginController::class, 'index'])->middleware('guest');
 Route::post('/login', [LoginController::class, 'authweb']);
 Route::post('/logout', [LoginController::class, 'logout']);
 
-Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
+Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     // Route::get('/upfoto', [FotoTransportController::class, 'createForm']);
     // Route::post('/upfoto', [FotoTransportController::class, 'fileUpload'])->name('fileUpload');
 
     // Route::get('/dashboard',function(){
     //     return view('dashboard', ['title'=>'Dashboard']);
     // });
-    Route::get('/dashboard',[LoginController::class, 'dashboard']);
+    Route::get('/dashboard', [LoginController::class, 'dashboard']);
 
 
     //group function TRANSPORTASI ========================================================================================================
-    Route::group(['prefix' => 'transportasi'], function(){
-        Route::get('/index',[TransportController::class, 'index']);
-        Route::get('/detail',[TransportController::class, 'detail']);
-        Route::post('/update',[TransportController::class, 'updateWeb']);
-        Route::get('/delete',[TransportController::class, 'deleteWeb']);
-        Route::get('/create', function(){
-            return view('transportasi.create', ['title'=>'Create Data Transportasi']);
+    Route::group(['prefix' => 'transportasi'], function () {
+        Route::get('/index', [TransportController::class, 'index']);
+        Route::get('/detail', [TransportController::class, 'detail']);
+        Route::post('/update', [TransportController::class, 'updateWeb']);
+        Route::get('/delete', [TransportController::class, 'deleteWeb']);
+        Route::get('/create', function () {
+            return view('transportasi.create', ['title' => 'Create Data Transportasi']);
         });
         Route::post('/create', [TransportController::class, 'create'])->middleware('auth');
     });
-    
+
     //group function CUSTOMER ========================================================================================================
-    Route::group(['prefix' => 'customer'], function(){
+    Route::group(['prefix' => 'customer'], function () {
         Route::get('/index', [LoginController::class, 'customer']);
     });
-    
+
     //group function PAKET ========================================================================================================
-    Route::group(['prefix' => 'paket'], function(){
+    Route::group(['prefix' => 'paket'], function () {
         Route::get('/index', [PaketController::class, 'index']);
         Route::get('/detail', [PaketController::class, 'paketDetail']);
         Route::get('/list', [PaketController::class, 'listDetail']);
         Route::post('/list', [PaketController::class, 'paketAddDet']);
-        Route::get('/create',  function(){
-            return view('paket.create', ['title'=>'Create Paket Wisata']);
+        Route::get('/create',  function () {
+            return view('paket.create', ['title' => 'Create Paket Wisata']);
         });
         Route::post('/create', [PaketController::class, 'paketCreate']);
         Route::get('/delete', [PaketController::class, 'paketDelete']);
@@ -76,11 +76,11 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
     });
 
     //group function OBJEK  ========================================================================================================        
-    Route::group(['prefix' => 'objek'], function(){
+    Route::group(['prefix' => 'objek'], function () {
         Route::get('/index', [ObjekController::class, 'index']);
         Route::get('/detail', [ObjekController::class, 'detail']);
-        Route::get('/create', function(){
-            return view('objek.create', ['title'=>'Create Objek Wisata']);
+        Route::get('/create', function () {
+            return view('objek.create', ['title' => 'Create Objek Wisata']);
         });
         Route::post('/create', [ObjekController::class, 'create']);
         Route::post('/update', [ObjekController::class, 'objekUpdate']);
@@ -88,11 +88,11 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
     });
 
     //group function RESERVASI  ========================================================================================================  
-    Route::group(['prefix' => 'reservasi'], function(){
+    Route::group(['prefix' => 'reservasi'], function () {
         Route::get('/index', [ReservasiController::class, 'index']);
         Route::post('/create', [ReservasiController::class, 'resCreate']);
         Route::post('/update', [ReservasiController::class, 'resUpdate']);
-        Route::get('/create',function(){
+        Route::get('/create', function () {
             return view('reservasi.create', ['title' => 'Create Reservasi']);
         });
         Route::get('/delete', [ReservasiController::class, 'resDelete']);
@@ -100,11 +100,13 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function(){
         Route::get('/detail', [ReservasiController::class, 'resDetail']);
         Route::get('/list', [ReservasiController::class, 'reslist']);
         Route::post('/list', [ReservasiController::class, 'resAddDet']);
+        Route::get('/print', [ReservasiController::class, 'printPdf']);
+
 
         // Route::get('/list', function(){
         //     return view('reservasi.list', ['title' => 'List Objek Reservasi']);
         // });
-    });     
+    });
 });
 
 // Route::get('/testchart', [LoginController::class, 'chartJs']);
