@@ -48,7 +48,6 @@
                         <a class="btn btn-outline-secondary mt-4 float-start" type="button"
                             href="{{ '/admin/objek/listfoto?tot_kode=' . $response[0]->tot_kode }}">Foto Objek <i
                                 class="bi bi-image"></i></a>
-
                     </div>
                 </div>
                 <div class="form-floating">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\tvl_foto_transport;
 use App\Models\tvl_transport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -13,8 +14,26 @@ class FotoTransportController extends Controller
 {
     //
 
-    public function createForm(){
-        return view('test');
+    public function fotoPage(Request $request){
+        
+        $validate = Validator::make($request->all(), [
+            'tt_kode' => 'required'
+        ]);
+        
+        //response error validation
+        if ($validate->fails()) {
+            return back();
+        }
+
+        $transport = $request->input('tt_kode');
+
+        $path = DB::table('tvl_foto_transports')
+        ->where('tft_tt_kode', $transport)
+        ->get();
+
+        $response = tvl_transport::find($transport);
+
+        return view('transportasi.foto',['response'=>$response, 'title'=>'Foto Transportasi', 'path' => $path]);
     }
 
     public function fileUpload(Request $req){
@@ -60,15 +79,25 @@ class FotoTransportController extends Controller
             return response()->json($validate->errors(), 400);
         }
 
-        $file = tvl_foto_transport::find($request->input('tft_kode'))->first();
+        // $file = tvl_foto_transport::find($request->input('tft_kode'))->first();
 
-        $fileName = $file->tft_path;
+        $file = DB::table('tvl_foto_transports')
+        ->where('tft_kode', $request->input('tft_kode'))
+        ->limit(1)
+        ->get()->all();
+
+        $fileName = $file[0]->tft_path;
 
         if(File::exists($fileName)){
 
             File::delete($fileName);
 
-            tvl_foto_transport::find($request->input('tft_kode'))->limit(1)->delete();
+            // tvl_foto_transport::find($request->input('tft_kode'))->limit(1)->delete();
+
+            $foto = DB::table('tvl_foto_transports')
+            ->where('tft_kode', $request->input('tft_kode'))
+            ->limit(1)
+            ->delete();
             
             return response()->json([
                 'success' => true,
@@ -97,5 +126,32 @@ class FotoTransportController extends Controller
         $transport = $request->input('tft_tt_kode');
 
         return tvl_transport::find($transport)->fotos;
+    }
+
+    public function listFotoPage(Request $request){
+        
+        $validate = Validator::make($request->all(), [
+            'tt_kode' => 'required'
+        ]);
+        
+        //response error validation
+        if ($validate->fails()) {
+            return back();
+        }
+
+        $transport = $request->input('tt_kode');
+
+        $list = DB::table('tvl_foto_transports')
+        ->join('tvl_transports', 'tft_tt_kode', '=', 'tt_kode')
+        ->where('tft_tt_kode', $transport)
+        ->get();
+
+        $titleStr = 'List Foto ...';
+        if(count($list->all()) > 0){
+            $titleStr = 'List Foto '.$list[0]->tt_nama;
+        }
+        
+
+        return view('transportasi.listfoto', ['title' => $titleStr, 'response' => $list, 'kode' => $transport]);
     }
 }

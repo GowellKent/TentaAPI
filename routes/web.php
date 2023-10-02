@@ -44,8 +44,12 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     Route::group(['prefix' => 'transportasi'], function () {
         Route::get('/index', [TransportController::class, 'index']);
         Route::get('/detail', [TransportController::class, 'detail']);
+        Route::get('/foto', [FotoTransportController::class, 'fotoPage']);
+        Route::post('/foto', [FotoTransportController::class, 'fileUpload']);
+        Route::get('/listfoto', [FotoTransportController::class, 'listFotoPage']);
         Route::post('/update', [TransportController::class, 'updateWeb']);
         Route::get('/delete', [TransportController::class, 'deleteWeb']);
+        Route::get('/delfoto', [FotoTransportController::class, 'delFoto']);
         Route::get('/create', function () {
             return view('transportasi.create', ['title' => 'Create Data Transportasi']);
         });

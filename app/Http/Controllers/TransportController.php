@@ -266,8 +266,12 @@ class TransportController extends Controller
         ->where('tt_kode', $id)
         ->get();
 
+        $path = DB::table('tvl_foto_transports')
+        ->where('tft_tt_kode', $id)
+        ->get();
+
         if(count($resp->all()) > 0){
-            return view('transportasi.detail', ['response'=>$resp, 'title'=>'Detail Transportasi']);
+            return view('transportasi.detail', ['response'=>$resp, 'title'=>'Detail Transportasi', 'path' => $path]);
         }
     }
 
