@@ -1,19 +1,59 @@
 @extends('layout/form')
 @section('container')
     <div class="card mx-auto mt-5" style="width: 40rem;">
+
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="false">
+            <div class="carousel-inner">
+                @foreach ($path as $key => $path)
+                    @if ($key == 0)
+                        <div class="carousel-item active">
+                            <img src={{ '/' . $path->tfo_path }} alt="..."class="card-img-top">
+                        </div>
+                    @else
+                        <div class="carousel-item">
+                            <img src={{ '/' . $path->tfo_path }} alt="..."class="card-img-top">
+                        </div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <a href="#carouselExampleControls" data-slide="prev" class="btn btn-lg float-end"><i
+                        class="bi bi-chevron-left text-success"></i></a>
+            </div>
+            <div class="col">
+                <a href="#carouselExampleControls" data-slide="next" class="btn btn-lg float-start"><i
+                        class="bi bi-chevron-right text-success"></i></a>
+            </div>
+        </div>
+
+
+        {{-- <img src={{ '/'.$path[0]->tfo_path }} alt="..."class="card-img-top" > --}}
         {{-- <img src="{{ $response[0]->tot_foto }}" alt="foto_objek" class="my-3 px-3 img-fluid"> --}}
         <div class="card-body">
             <form action="/admin/objek/update" method="post">
                 @csrf
-                <div class="form-floating my-3">
-                    <input type="text" name="tot_kode" class="form-control" readonly value="{{$response[0]->tot_kode}}" id="floatingtot_kode">
-                    <label for="floatingtot_kode">
-                        <h6>Kode Objek</h6>
-                    </label>
+                <div class="row">
+                    <div class="col-9">
+                        <div class="form-floating my-3">
+                            <input type="text" name="tot_kode" class="form-control" readonly
+                                value="{{ $response[0]->tot_kode }}" id="floatingtot_kode">
+                            <label for="floatingtot_kode">
+                                <h6>Kode Objek</h6>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <a class="btn btn-outline-secondary mt-4 float-start" type="button"
+                            href="{{ '/admin/objek/listfoto?tot_kode=' . $response[0]->tot_kode }}">Foto Objek <i
+                                class="bi bi-image"></i></a>
+
+                    </div>
                 </div>
                 <div class="form-floating">
                     <select class="form-control" id="floatingtot_tjo_kode" name="tot_tjo_kode">
-                        <option value="{{$response[0]->tot_tjo_kode}}">{{$response[0]->tjo_desc}}</option>
+                        <option value="{{ $response[0]->tot_tjo_kode }}">{{ $response[0]->tjo_desc }}</option>
                     </select>
                     <label for="floatingtot_tjo_kode">
                         <h6>Jenis Objek</h6>
@@ -34,8 +74,7 @@
                     </label>
                 </div>
                 <div class="form-floating my-3">
-                    <textarea type="text" name="tot_alamat" class="form-control" id="floatingtot_alamat" 
-                        style="height: 7rem;">{{ $response[0]->tot_alamat }}</textarea>
+                    <textarea type="text" name="tot_alamat" class="form-control" id="floatingtot_alamat" style="height: 7rem;">{{ $response[0]->tot_alamat }}</textarea>
                     <label for="floatingtot_alamat">
                         <h6>Alamat</h6>
                     </label>
@@ -44,7 +83,7 @@
                     <div class="col">
                         <div class="form-floating">
                             <select class="form-control" id="floatingtot_provinsi" name="tot_tp_kode">
-                                <option value="{{$response[0]->tot_tp_kode}}">{{$response[0]->tp_nama}}</option>
+                                <option value="{{ $response[0]->tot_tp_kode }}">{{ $response[0]->tp_nama }}</option>
                             </select>
                             <label for="floatingtot_provinsi">
                                 <h6>Provinsi</h6>
@@ -114,7 +153,7 @@
                             })
                     })
             });
-            
+
         fetch('/api/objek/jenis')
             .then((response) => {
                 return response.json()

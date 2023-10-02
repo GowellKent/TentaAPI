@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\tvl_foto_objek;
 use App\Models\tvl_objek_tujuan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,8 +14,26 @@ class FotoObjekController extends Controller
     //
 
     
-    public function createForm(){
-        return view('test');
+    public function fotoPage(Request $request){
+
+        $validate = Validator::make($request->all(), [
+            'tot_kode' => 'required'
+        ]);
+        
+        //response error validation
+        if ($validate->fails()) {
+            return back();
+        }
+
+        $objek = $request->input('tot_kode');
+
+        $path = DB::table('tvl_foto_objeks')
+        ->where('tfo_tot_kode', $objek)
+        ->get();
+
+        $response = tvl_objek_tujuan::find($objek);
+
+        return view('objek.foto',['response'=>$response, 'title'=>'Foto Objek Wisata', 'path' => $path]);
     }
 
     public function fileUpload(Request $req){
@@ -31,6 +50,10 @@ class FotoObjekController extends Controller
         if ($validate->fails()) {
             return response()->json($validate->errors(), 400);
         }
+
+        $fotoObjek = DB::table('tvl_foto_objeks')
+        ->where('tfo_tot_kode', $req->input('tfo_tot_kode'))
+        ->get();
 
         $fileModel = new tvl_foto_objek();
         // if($req->file()) {
@@ -60,20 +83,29 @@ class FotoObjekController extends Controller
             return response()->json($validate->errors(), 400);
         }
 
-        $file = tvl_foto_objek::find($request->input('tfo_kode'))->first();
+        // $file = tvl_foto_objek::find($request->input('tfo_kode'))->first();
+        
+        $file = DB::table('tvl_foto_objeks')
+        ->where('tfo_kode', $request->input('tfo_kode'))
+        ->limit(1)
+        ->get()->all();
+    
 
-        $fileName = $file->tfo_path;
+        $fileName = $file[0]->tfo_path;
 
         if(File::exists($fileName)){
 
             File::delete($fileName);
 
-            tvl_foto_objek::find($request->input('tfo_kode'))->limit(1)->delete();
+            // tvl_foto_objek::find($request->input('tfo_kode'))->limit(1)->delete();
+            $foto = DB::table('tvl_foto_objeks')
+            ->where('tfo_kode', $request->input('tfo_kode'))
+            ->limit(1)
+            ->delete();
             
             return response()->json([
                 'success' => true,
                 'message' => 'File Deleted',
-
             ], 200);
         }
         return response()->json([
@@ -94,8 +126,31 @@ class FotoObjekController extends Controller
             return response()->json($validate->errors(), 400);
         }
 
-        $objek = $request->input('tft_tt_kode');
+        $objek = $request->input('tfo_tot_kode');
 
         return tvl_objek_tujuan::find($objek)->fotos;
+    }
+
+    public function listFotoPage(Request $request){
+
+        $validate = Validator::make($request->all(), [
+            'tot_kode' => 'required'
+        ]);
+        
+        //response error validation
+        if ($validate->fails()) {
+            return back();
+        }
+
+        $objek = $request->input('tot_kode');
+
+        $list = DB::table('tvl_foto_objeks')
+        ->join('tvl_objek_tujuans', 'tfo_tot_kode', '=', 'tot_kode')
+        ->where('tfo_tot_kode', $objek)
+        ->get();
+
+        $titleStr = 'List Foto '.$list[0]->tot_nama;
+
+        return view('objek.listfoto', ['title' => $titleStr, 'response' => $list]);
     }
 }

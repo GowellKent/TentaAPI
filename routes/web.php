@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FotoObjekController;
 use App\Http\Controllers\FotoTransportController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ObjekController;
@@ -85,6 +86,10 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
         Route::post('/create', [ObjekController::class, 'create']);
         Route::post('/update', [ObjekController::class, 'objekUpdate']);
         Route::get('/delete', [ObjekController::class, 'objekDelete']);
+        Route::get('/delfoto', [FotoObjekController::class, 'delFoto']);
+        Route::get('/foto', [FotoObjekController::class, 'fotoPage']);
+        Route::get('/listfoto', [FotoObjekController::class, 'listFotoPage']);
+        Route::post('/foto', [FotoObjekController::class, 'fileUpload']);
     });
 
     //group function RESERVASI  ========================================================================================================  
@@ -113,4 +118,3 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
 
 
 // Route::get('/upFoto', [FotoTransportController::class, 'createForm']);
-// Route::post('/upFoto', [FotoTransportController::class, 'fileUpload'])->name('fileUpload');

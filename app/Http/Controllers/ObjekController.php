@@ -276,8 +276,12 @@ class ObjekController extends Controller
             ->where('tot_kode', $id)
             ->get();
 
+            $path = DB::table('tvl_foto_objeks')
+            ->where('tfo_tot_kode', $id)
+            ->get();
+
         if(count($resp->all()) > 0){
-            return view('objek.detail', ['response'=>$resp, 'title'=>'Detail Objek']);
+            return view('objek.detail', ['response'=>$resp, 'title'=>'Detail Objek', 'path' =>$path]);
         }
         else{
             return back();
