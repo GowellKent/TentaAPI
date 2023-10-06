@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\tvl_reservasi_head;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -146,7 +147,40 @@ class LoginController extends Controller
     ->groupBy('month_name','day')
     ->orderBy('day')
     ->get();
-  
+
+    $pending = tvl_reservasi_head::select(DB::raw("COUNT(*) as counted"))
+    ->where('trh_tsr_kode', 2)
+    ->get();
+
+    $status = tvl_reservasi_head::select('trh_tsr_kode',DB::raw("COUNT(*) as total"))
+    ->groupBy('trh_tsr_kode')
+    ->get();
+
+    $totalDone = 0;
+    $totalTask = 0;
+    foreach($status as $key){
+        if($key['trh_tsr_kode'] == '4'){
+            $totalDone = $key['total'];
+        }
+        $totalTask += $key['total'];
+    }
+
+    $taskDonePrc = $totalDone / $totalTask * 100;
+
+    $earnMonth = tvl_reservasi_head::select(DB::raw("SUM(trh_harga) as total"))
+    ->where('trh_tsr_kode', '4')
+    ->where(DB::raw('MONTH(trh_tgl_reservasi)'), DB::raw('MONTH(CURRENT_DATE())'))
+    ->get();
+   
+    $earnYear = tvl_reservasi_head::select(DB::raw("SUM(trh_harga) as total"))
+    ->where('trh_tsr_kode', '4')
+    ->where(DB::raw('YEAR(trh_tgl_reservasi)'), DB::raw('YEAR(CURRENT_DATE())'))
+    ->get();
+
+    $earning = [];
+    $earning['monthly'] = $earnMonth[0]->total;
+    $earning['yearly'] = $earnYear[0]->total;
+
      $data = [];
  
      foreach($record as $row) {
@@ -155,7 +189,7 @@ class LoginController extends Controller
       }
  
     $data['chart_data'] = json_encode($data);
-    return view('dashboard', $data)->with('title', 'Dashboard');
+    return view('dashboard', $data)->with(['title' => 'Dashboard', 'pending' => $pending[0]->counted, 'earning' => $earning, 'done' => $taskDonePrc]);
     }
 
     public function customer(){
