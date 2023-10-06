@@ -142,8 +142,10 @@ class LoginController extends Controller
     }
 
     public function dashboard(){
-        $record = User::select(DB::raw("COUNT(*) as count"), DB::raw("MONTHNAME(created_at) as month_name"), DB::raw("MONTH(created_at) as day"))
+        $record = tvl_reservasi_head::select(DB::raw("SUM(trh_harga) as count"), DB::raw("MONTHNAME(trh_tgl_reservasi) as month_name"), DB::raw("MONTH(trh_tgl_reservasi) as day"))
     // ->where('created_at', '>', Carbon::today()->subDay(6))
+    ->where('trh_tsr_kode', 4)
+    ->where(DB::raw('YEAR(trh_tgl_reservasi)'), DB::raw('YEAR(CURRENT_DATE())'))
     ->groupBy('month_name','day')
     ->orderBy('day')
     ->get();
@@ -157,15 +159,34 @@ class LoginController extends Controller
     ->get();
 
     $totalDone = 0;
+    $totalPending = 0;
+    $totalCheck = 0;
+    $totalCancel = 0;
     $totalTask = 0;
+    
     foreach($status as $key){
-        if($key['trh_tsr_kode'] == '4'){
+        switch($key['trh_tsr_kode']){
+            case 1:
+            $totalCheck = $key['total'];
+            break;
+            case 2:
+            $totalPending = $key['total'];
+            break;
+            case 3:
+            $totalCancel = $key['total'];
+            break;
+            case 4:
             $totalDone = $key['total'];
+            break;
         }
         $totalTask += $key['total'];
     }
 
-    $taskDonePrc = $totalDone / $totalTask * 100;
+    
+    $tasks['check'] =  $totalCheck / $totalTask * 100;
+    $tasks['pending'] =  $totalPending / $totalTask * 100;
+    $tasks['cancel'] =  $totalCancel / $totalTask * 100;
+    $tasks['done'] =  $totalDone / $totalTask * 100;
 
     $earnMonth = tvl_reservasi_head::select(DB::raw("SUM(trh_harga) as total"))
     ->where('trh_tsr_kode', '4')
@@ -189,7 +210,7 @@ class LoginController extends Controller
       }
  
     $data['chart_data'] = json_encode($data);
-    return view('dashboard', $data)->with(['title' => 'Dashboard', 'pending' => $pending[0]->counted, 'earning' => $earning, 'done' => $taskDonePrc]);
+    return view('dashboard', $data)->with(['title' => 'Dashboard', 'pending' => $totalPending, 'earning' => $earning, 'tasks' => $tasks]);
     }
 
     public function customer(){

@@ -59,12 +59,12 @@
                                 </div>
                                 <div class="row no-gutters align-items-center">
                                     <div class="col-auto">
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{$done}}%</div>
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{$tasks['done']}}%</div>
                                     </div>
                                     <div class="col">
                                         <div class="progress progress-sm mr-2">
                                             <div class="progress-bar bg-info" role="progressbar"
-                                                style="width: {{$done}}%" aria-valuenow="{{$done}}" aria-valuemin="0"
+                                                style="width: {{$tasks['done']}}%" aria-valuenow="{{$tasks['done']}}" aria-valuemin="0"
                                                 aria-valuemax="100"></div>
                                         </div>
                                     </div>
@@ -156,39 +156,39 @@
                 <!-- Project Card Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3"  style="background-color: #00BFA6;">
-                        <h6 class="m-0 font-weight-bold text-light">Projects</h6>
+                        <h6 class="m-0 font-weight-bold text-light">Project Tasks</h6>
                     </div>
                     <div class="card-body" style="background-color: #f8f9fc">
-                        <h4 class="small font-weight-bold">Server Migration <span
-                                class="float-right">20%</span></h4>
+                        <h4 class="small font-weight-bold">Canceled <span
+                                class="float-right">{{$tasks['cancel']}}%</span></h4>
                         <div class="progress mb-4">
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                                aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: {{$tasks['cancel']}}%"
+                                aria-valuenow="{{$tasks['cancel']}}" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <h4 class="small font-weight-bold">Sales Tracking <span
-                                class="float-right">40%</span></h4>
+                        <h4 class="small font-weight-bold">Checking <span
+                                class="float-right">{{$tasks['check']}}%</span></h4>
                         <div class="progress mb-4">
-                            <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
-                                aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-info" role="progressbar" style="width: {{$tasks['check']}}%"
+                                aria-valuenow="{{$tasks['check']}}" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <h4 class="small font-weight-bold">Customer Database <span
-                                class="float-right">60%</span></h4>
+                        <h4 class="small font-weight-bold">Pending <span
+                                class="float-right">{{$tasks['pending']}}%</span></h4>
                         <div class="progress mb-4">
-                            <div class="progress-bar" role="progressbar" style="width: 60%"
-                                aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: {{$tasks['pending']}}%"
+                                aria-valuenow="{{$tasks['pending']}}" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <h4 class="small font-weight-bold">Payout Details <span
-                                class="float-right">80%</span></h4>
+                        <h4 class="small font-weight-bold">Done <span
+                                class="float-right">{{$tasks['done']}}%</span></h4>
                         <div class="progress mb-4">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{$tasks['done']}}%"
                                 aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <h4 class="small font-weight-bold">Account Setup <span
+                        {{-- <h4 class="small font-weight-bold">Account Setup <span
                                 class="float-right">Complete!</span></h4>
                         <div class="progress">
                             <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
                                 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
